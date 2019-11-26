@@ -5,7 +5,7 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   
-  <dependencies>
+ <dependencies>
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -34,5 +34,5 @@
 			<artifactId>ojdbc7</artifactId>
 			<version>12.2.0.1.0</version>
 		</dependency>
-		
+	</dependencies>
 </project>
