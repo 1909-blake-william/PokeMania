@@ -1,5 +1,7 @@
 # PokeMania
 
+# Modified by William
+
 ### Main Features
 
 * Register an account
