@@ -28,6 +28,17 @@ public class UserDaoSql implements UserDao {
 									FETCH_PSWD_SQL	= "SELECT trainer_password FROM trainers WHERE username = ?";
 
 	/**
+	 * Package private getter for the instance. The instance is meant to be retrieved
+	 * from the interface so that if a different implementation is used to manage data,
+	 * no code beyond the interface is needed to be modified.
+	 * 
+	 * @return
+	 */
+	static UserDaoSql getInstance() {
+		return instance;
+	}
+	
+	/**
 	 * Fetch a user from the database by the username.
 	 * 
 	 * @exception SQLException thrown upon when there's a failure to read from the db or if the user doesn't exist
@@ -102,17 +113,6 @@ public class UserDaoSql implements UserDao {
 		}
 		
 	}
-	
-	/**
-	 * Package private getter for the instance. The instance is meant to be retrieved
-	 * from the interface so that if a different implementation is used to manage data,
-	 * no code beyond the interface is needed to be modified.
-	 * 
-	 * @return
-	 */
-	static UserDaoSql getInstance() {
-		return instance;
-	}
 
 	/**
 	 * Get the password for the username to check if login is valid
@@ -135,7 +135,7 @@ public class UserDaoSql implements UserDao {
 			
 			if(rs.next())
 				
-				return rs.getString(1);
+				return Password.transformPasswd(rs.getString(1), username);
 			
 			else
 				
