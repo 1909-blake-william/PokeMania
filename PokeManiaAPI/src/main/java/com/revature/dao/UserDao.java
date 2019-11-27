@@ -16,6 +16,8 @@ public interface UserDao {
 	
 	User 	fetchUser(String username) throws SQLException;
 	boolean	addNewUser(User user, String password) throws SQLException;
+	boolean	addFriend(String username, String friendName) throws SQLException;
 	String	getPassword(String username) throws SQLException;
+	String[] getFriends(int userID) throws SQLException;
 	
 }
