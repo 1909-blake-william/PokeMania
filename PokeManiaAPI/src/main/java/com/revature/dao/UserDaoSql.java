@@ -17,7 +17,8 @@ import com.revature.util.Password;
 
 /**
  * Handles the saving and fetching of user data with the remote SQL database on
- * AWS. Fetch a single user or save a new one.
+ * AWS. Fetch a single user or save a new one. Set a friend or fetch all friends.
+ * Also fetch the password of a user for comparison for login.
  * 
  * @author Kristoffer Spencer
  */
