@@ -6,51 +6,50 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.revature.dao.PokemonDao;
+import com.revature.dao.PokemonDaoSql;
+import com.revature.dao.UserDaoSql;
 import com.revature.model.Pokemon;
+import com.revature.model.User;
 import com.revature.util.ConnectionUtil;
 
 public class PokemonDaoTester {
 	
-	private static final 	PokemonDao	dao		= PokemonDao.currentImplimentation;
-	private static final	Logger		log		= LogManager.getLogger(PokemonDaoTester.class);
-	private static final	String		RM_POKE	= "DELETE FROM pokemon WHERE id = ?";
-	private 				Pokemon		p1,
-										p2,
-										p3,
-										p4,
-										p5;
-	private final			int			t1 		= -1,
-										t2		= -2,
-										t3		= -3;
+	private static final 	PokemonDaoSql	dao		= PokemonDaoSql.getInstance();
+	private static final	UserDaoSql		uDao	= UserDaoSql.getInstance();
+	private static final	String			RM_POKE	= "DELETE FROM pokemon WHERE pokemon_id = ?",
+											RM_USR	= "DELETE FROM trainers WHERE trainer_id = ";
+	private static 			Pokemon			p1,
+											p2,
+											p3,
+											p4,
+											p5;
+	private static final	User			t1 		= new User("Tester11", "Bob", "Man", -1, 0, 0, 0),
+											t2		= new User("Tester22", "Bob", "Man", -2, 0, 0, 0),
+											t3		= new User("Tester33", "Bob", "Man", -3, 0, 0, 0);
 	
-	@Before
-	public void setup() {
+	@BeforeClass
+	public static void setup() throws SQLException {
 		
 		//Only the first two args are important. id and t_id
-		p1 = new Pokemon(-1, t1, 0, 0, 0, 0, 0, 0, null, null, null, null);
-		p2 = new Pokemon(-2, t1, 0, 0, 0, 0, 0, 0, null, null, null, null);
-		p3 = new Pokemon(-3, t1, 0, 0, 0, 0, 0, 0, null, null, null, null);
-		p4 = new Pokemon(-4, t2, 0, 0, 0, 0, 0, 0, null, null, null, null);
+		p1 = new Pokemon(-1, t1.getId(), 0, 0, 0, 0, 0, 0, "Fire", null, "img", "img");
+		p2 = new Pokemon(-2, t1.getId(), 0, 0, 0, 0, 0, 0, "Fire", null, "img", "img");
+		p3 = new Pokemon(-3, t1.getId(), 0, 0, 0, 0, 0, 0, "Fire", null, "img", "img");
+		p4 = new Pokemon(-4, t2.getId(), 0, 0, 0, 0, 0, 0, "Fire", null, "img", "img");
+
+		uDao.add_TEST_newUser(t1, "pass");
+		uDao.add_TEST_newUser(t2, "pass");
+		uDao.add_TEST_newUser(t3, "pass");
+		System.out.println("Users added");
 		
-		try {
-			
-			dao.savePokemon(p1);
-			dao.savePokemon(p2);
-			dao.savePokemon(p3);
-			dao.savePokemon(p4);
-			
-		} catch(SQLException e) {
-			
-			log.error("Error: Failed to add test pokemon to db\n" + e.getMessage());
-			
-		}
+		dao.save_TEST_pokemon(p1);
+		dao.save_TEST_pokemon(p2);
+		dao.save_TEST_pokemon(p3);
+		dao.save_TEST_pokemon(p4);
+		System.out.println("Pokes added");
 		
 	}
 	
@@ -83,7 +82,7 @@ public class PokemonDaoTester {
 				//Fail the test
 				assertTrue(false);
 			
-			pokemon = dao.fetchTeam(t1);
+			pokemon = dao.fetchTeam(t1.getId());
 			
 			
 		} catch(SQLException e) {
@@ -124,7 +123,7 @@ public class PokemonDaoTester {
 		
 		try {
 
-			pokemon = dao.fetchBox(t1);
+			pokemon = dao.fetchBox(t1.getId());
 			
 		} catch(SQLException e) {
 			
@@ -140,11 +139,11 @@ public class PokemonDaoTester {
 	@Test
 	public void testSavePokemon() {
 		
-		p5	= new Pokemon(-5, t3, 0, 0, 0, 0, 0, 0, null, null, null, null);
+		p5	= new Pokemon(-5, t3.getId(), 0, 0, 0, 0, 0, 0, null, null, null, null);
 		
 		try {
 			
-			dao.savePokemon(p5);
+			dao.save_TEST_pokemon(p5);
 			assertTrue(p5.equals(dao.fetchPokemon(-5)));
 			
 		} catch(SQLException e) {
@@ -164,7 +163,7 @@ public class PokemonDaoTester {
 		try {
 			
 			dao.saveTeam(pokemon);
-			pokemon = dao.fetchTeam(t2);
+			pokemon = dao.fetchTeam(t2.getId());
 			
 		} catch(SQLException e) {
 			
@@ -251,8 +250,8 @@ public class PokemonDaoTester {
 		
 	}
 	
-	@After
-	public void cleanUp() {
+	@AfterClass
+	public static void cleanUp() throws SQLException {
 		
 		PreparedStatement	ps;
 		
@@ -276,9 +275,21 @@ public class PokemonDaoTester {
 			
 			ps.executeBatch();
 			
+			ps = c.prepareStatement(RM_USR);
+			ps.setInt(1, t1.getId());
+			ps.addBatch();
+			ps.clearParameters();
+			ps.setInt(1, t2.getId());
+			ps.addBatch();
+			ps.clearParameters();
+			ps.setInt(1, t3.getId());
+			ps.addBatch();
+			
+			ps.executeBatch();
+			
 		} catch(SQLException e) {
 			
-			log.error("Error: Failed to clean up test pokemon\n" + e.getMessage());
+			throw e;
 			
 		}
 		

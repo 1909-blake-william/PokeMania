@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.revature.model.Pokemon;
 import com.revature.util.ConnectionUtil;
@@ -24,12 +24,15 @@ public class PokemonDaoSql implements PokemonDao {
 	private final static	PokemonDaoSql	instance		= new PokemonDaoSql();
 	private final static	Logger			log				= LogManager.getLogger(PokemonDaoSql.class);
 	
-	private final 			String			GET_ONE_SQL		= "SELECT * FROM pokemon WHERE id = ?",
-											GET_ALL_SQL		= "SELECT * FROM pokemon WHERE t_id = ?",
-											GET_TEAM_SQL	= "SELECT * FROM teams WHERE t_id = ?",
-											SAVE_ONE_SQL	= "INSERT INTO pokemon (data) VALUES (data)",
-											SAVE_TEAM_SQL	= "INSERT INTO teams (t_id, p_id) VALUES (?, ?)",
-											CLEAR_TEAM_SQL	= "DELETE FROM team WHERE t_id = ?";
+	private final 			String			GET_ONE_SQL		= "SELECT * FROM pokemon WHERE pokemon_id = ?",
+											GET_ALL_SQL		= "SELECT * FROM pokemon WHERE trainer_id = ?",
+											GET_TEAM_SQL	= "SELECT * FROM pokemon_team WHERE trainer_id = ?",
+											SAVE_ONE_SQL	= "INSERT INTO pokemon (trainer_id, pokedex_id, pokemon_level, "
+															+ "pokemon_hp, pokemon_att, pokemon_def, pokemon_speed, pokemon_type1, "
+															+ "pokemon_type2 front_image, back_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+											SAVE_TEST_SQL	= "INSERT INTO pokemon VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+											SAVE_TEAM_SQL	= "INSERT INTO pokemon_team VALUES (?, ?)",
+											CLEAR_TEAM_SQL	= "DELETE FROM pokemon_team WHERE trainer_id = ?";
 											
 	
 	/**
@@ -70,12 +73,12 @@ public class PokemonDaoSql implements PokemonDao {
 			
 		}
 		
-		if(rs.next()) {
+		if(rs.next())
 			
-			//Make new pokemon
-			//Need table data
-			
-		}
+			pokemon = new Pokemon(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), 
+								  rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getInt(8), 
+								  rs.getString(9), rs.getString(10), rs.getString(11), 
+								  rs.getString(12));
 		
 		return pokemon;
 		
@@ -111,7 +114,10 @@ public class PokemonDaoSql implements PokemonDao {
 		while(rs.next())
 	
 			//Need table data
-			pokemon.add(new Pokemon(0, 0, 0, 0, 0, 0, 0, 0, null, null, null, null));
+			pokemon.add(new Pokemon(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), 
+					  				rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getInt(8), 
+					  				rs.getString(9), rs.getString(10), rs.getString(11), 
+					  				rs.getString(12)));
 		
 		return (Pokemon[]) pokemon.toArray();
 				
@@ -147,7 +153,10 @@ public class PokemonDaoSql implements PokemonDao {
 		while(rs.next())
 			
 			//Missing table data
-			pokemon.add(new Pokemon(0, 0, 0, 0, 0, 0, 0, 0, null, null, null, null));
+			pokemon.add(new Pokemon(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), 
+									rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getInt(8), 
+									rs.getString(9), rs.getString(10), rs.getString(11), 
+									rs.getString(12)));
 		
 		return (Pokemon[]) pokemon.toArray();
 		
@@ -168,7 +177,18 @@ public class PokemonDaoSql implements PokemonDao {
 		try(Connection c = ConnectionUtil.getConnection()) {
 			
 			ps = c.prepareStatement(SAVE_ONE_SQL);
-			//ps.set data
+			ps.setInt(1, pokemon.getTrainerId());
+			ps.setInt(2, pokemon.getDexNum());
+			ps.setInt(3, pokemon.getLevel());
+			ps.setInt(4, pokemon.getHp());
+			ps.setInt(5, pokemon.getAtt());
+			ps.setInt(6, pokemon.getDef());
+			ps.setInt(7, pokemon.getSpd());
+			ps.setString(8, pokemon.getType1());
+			ps.setString(9, pokemon.getType2());
+			ps.setString(10, pokemon.getFrontImg());
+			ps.setString(11, pokemon.getBackImg());
+			
 			return ps.executeUpdate() == 1;
 			
 		} catch(SQLException e) {
@@ -179,6 +199,44 @@ public class PokemonDaoSql implements PokemonDao {
 		}
 		
 	}
+	
+	/**
+	 * Save a single pokemon to the db and set the ID
+	 * 
+	 * @param The pokemon to save
+	 * @return Whether save was successful
+	 * @exception Throws a SQLException if an issue happens when talking to the db
+	 */
+	public boolean save_TEST_pokemon(Pokemon pokemon) throws SQLException {
+		
+		PreparedStatement	ps;
+		
+		try(Connection c = ConnectionUtil.getConnection()) {
+			
+			ps = c.prepareStatement(SAVE_TEST_SQL);
+			ps.setInt(1, pokemon.getId());
+			ps.setInt(2, pokemon.getTrainerId());
+			ps.setInt(3, pokemon.getDexNum());
+			ps.setInt(4, pokemon.getLevel());
+			ps.setInt(5, pokemon.getHp());
+			ps.setInt(6, pokemon.getAtt());
+			ps.setInt(7, pokemon.getDef());
+			ps.setInt(8, pokemon.getSpd());
+			ps.setString(9, pokemon.getType1());
+			ps.setString(10, pokemon.getType2());
+			ps.setString(11, pokemon.getFrontImg());
+			ps.setString(12, pokemon.getBackImg());
+			
+			return ps.executeUpdate() == 1;
+			
+		} catch(SQLException e) {
+			
+			log.warn("Error: Failed to save single pokemon\n" + e.getMessage());
+			throw e;
+			
+		}
+		
+	}	
 
 	/**
 	 * Saves the current team of the user

@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.revature.model.User;
 import com.revature.util.ConnectionUtil;
@@ -26,14 +26,15 @@ public class UserDaoSql implements UserDao {
 	
 	private static final UserDaoSql	instance 		= new UserDaoSql();
 	private static final Logger		logger			= LogManager.getLogger(UserDaoSql.class);
-	private static final String		GET_USER_SQL 	= "SELECT * FROM trainers WHERE username = ?",
+	private static final String		GET_USER_SQL 	= "SELECT * FROM trainers WHERE trainer_name = ?",
 									INSERT_USER_SQL	= "INSERT INTO trainers (trainer_name, trainer_password, first_name, last_name, badges, wins, losses)"
 													+ " VALUES (?, ?, ?, ?, ?, ?, ?)",
-									FETCH_PSWD_SQL	= "SELECT trainer_password FROM trainers WHERE username = ?",
-									FETCH_FRND_IDS	= "SELECT * FROM trainer_friends WHERE trainer1 = ? OR trainer2 = ?",
-									FETCH_FRND_NMS	= "SELECT trainer_name FROM trainers WHERE id = ",
-									ADD_FRND		= "INSERT INTO trainer_friends VALUES ((SELECT id FROM trainers WHERE trainer_name = ?), "
-													+ "(SELECT id FROM trainers WHERE trainer_name = ?)";
+									INSERT_TEST_SQL	= "INSERT INTO trainers VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+									FETCH_PSWD_SQL	= "SELECT trainer_password FROM trainers WHERE trainer_name = ?",
+									FETCH_FRND_IDS	= "SELECT * FROM friends WHERE trainer_id1 = ? OR trainer_id2 = ?",
+									FETCH_FRND_NMS	= "SELECT trainer_name FROM trainers WHERE trainer_id = ",
+									ADD_FRND		= "INSERT INTO friends VALUES ((SELECT trainer_id FROM trainers WHERE trainer_name = ?), "
+													+ "(SELECT trainer_id FROM trainers WHERE trainer_name = ?))";
 
 	/**
 	 * Package private getter for the instance. The instance is meant to be retrieved
@@ -42,7 +43,7 @@ public class UserDaoSql implements UserDao {
 	 * 
 	 * @return
 	 */
-	static UserDaoSql getInstance() {
+	static public UserDaoSql getInstance() {
 		return instance;
 	}
 	
@@ -62,7 +63,7 @@ public class UserDaoSql implements UserDao {
 		try(Connection c = ConnectionUtil.getConnection()) {
 			
 			ps = c.prepareStatement(GET_USER_SQL);
-			ps.setString(1,username);
+			ps.setString(1, username);
 			rs = ps.executeQuery();
 			
 			if(rs.next())
@@ -73,6 +74,7 @@ public class UserDaoSql implements UserDao {
 		} catch(SQLException e) {
 			
 			logger.warn("Error: Could not fetch user\n" + e.getMessage());
+			
 			throw e; //Exception is propagated for higher level exception handling
 			
 		}
@@ -106,6 +108,42 @@ public class UserDaoSql implements UserDao {
 			ps.setInt(5, 0);
 			ps.setInt(6, 0);
 			ps.setInt(7, 0);
+			
+			return ps.executeUpdate() == 1;
+			
+		} catch(SQLException e) {
+			
+			logger.warn("Error: Failed to add new user to DB\n" + e.getMessage());
+			throw e; //Exception is propagated for higher level exception handling
+			
+		}
+		
+	}
+	
+	/**
+	 * TEST VERSION allows to set the id in db
+	 * Register a new user to the system by passing in all the user info needed. Writes to the db
+	 * 
+	 * @param User object with the user's data. Password for the user for loggin in
+	 * @return Whether the user was saved successfully
+	 * @exception Thrown when there's an error writing to the db
+	 */
+	public boolean add_TEST_newUser(User user, String password) throws SQLException {
+		//(trainer_name, trainer_password, first_name, last_name, badges, wins, losses)
+		
+		PreparedStatement	ps	= null;
+		
+		try(Connection c = ConnectionUtil.getConnection()) {
+			
+			ps = c.prepareStatement(INSERT_TEST_SQL);
+			ps.setInt(1, user.getId());
+			ps.setString(2, user.getUsername());
+			ps.setString(3, Password.transformPasswd(password, user.getUsername()));
+			ps.setString(4, user.getFirstname());
+			ps.setString(5, user.getLastname());
+			ps.setInt(6, user.getBadges());
+			ps.setInt(7, user.getWins());
+			ps.setInt(8, user.getLosses());
 			
 			return ps.executeUpdate() == 1;
 			
@@ -202,7 +240,7 @@ public class UserDaoSql implements UserDao {
 		
 		friendNames = getFriendNames(createIDsString(friendIDs));
 		
-		return (String[]) friendNames.toArray();
+		return friendNames.toArray(new String[0]);
 		
 	}
 	
@@ -227,31 +265,31 @@ public class UserDaoSql implements UserDao {
 			ps.setInt(2, userID);
 			rs = ps.executeQuery();
 			
+			//Gather up the ids of the friends. Value pairs can have the friend
+			//in either column
+			while(rs.next()) {
+				
+				int id1 = rs.getInt(1),
+					id2 = rs.getInt(2);
+				
+				if(id1 == userID)
+					
+					friendIDs.add(id2);
+				
+				else
+					
+					friendIDs.add(id1);
+				
+			}
+			
+			return friendIDs;
+			
 		} catch(SQLException e) {
 			
 			logger.warn("Error: Failed to fetch friends\n" + e.getMessage());
 			throw e;
 			
 		}
-		
-		//Gather up the ids of the friends. Value pairs can have the friend
-		//in either column
-		while(rs.next()) {
-			
-			int id1 = rs.getInt(1),
-				id2 = rs.getInt(2);
-			
-			if(id1 == userID)
-				
-				friendIDs.add(id2);
-			
-			else
-				
-				friendIDs.add(id1);
-			
-		}
-		
-		return friendIDs;
 		
 	}
 	
@@ -299,18 +337,18 @@ public class UserDaoSql implements UserDao {
 			ps = c.prepareStatement(FETCH_FRND_NMS + idList);
 			rs = ps.executeQuery();
 			
+			while(rs.next())
+				
+				names.add(rs.getString(1));
+			
+			return names;
+			
 		} catch(SQLException e) {
 			
 			logger.warn("Error: Failed to fetch friends\n" + e.getMessage());
 			throw e;
 			
 		}
-		
-		while(rs.next())
-			
-			names.add(rs.getString(1));
-		
-		return names;
 		
 	}
 
