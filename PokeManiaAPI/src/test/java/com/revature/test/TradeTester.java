@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 
@@ -30,7 +31,8 @@ public class TradeTester {
 											u2 		= new User("Tester22", null, null, -2, 0, 0, 0),
 											u3		= new User("Tester33", null, null, -3, 0, 0, 0),
 											u4		= new User("Tester44", null, null, -4, 0, 0, 0),
-											u5		= new User("Tester55", null, null, -5, 0, 0, 0);
+											u5		= new User("Tester55", null, null, -5, 0, 0, 0),
+											u6		= new User("Tester66", null, null, -6, 0, 0, 0);
 	private static final	UserDaoSql		udao	= UserDaoSql.getInstance();
 	private static final	PokemonDaoSql	pdao	= PokemonDaoSql.getInstance();
 	private static final	TradeDaoSql		tdao	= TradeDaoSql.getInstance();
@@ -46,6 +48,7 @@ public class TradeTester {
 		udao.add_TEST_newUser(u3, "pass");
 		udao.add_TEST_newUser(u4, "pass");
 		udao.add_TEST_newUser(u5, "pass");
+		udao.add_TEST_newUser(u6, "pass");
 		
 		pdao.save_TEST_pokemon(p1);
 		pdao.save_TEST_pokemon(p2);
@@ -56,6 +59,7 @@ public class TradeTester {
 		tdao.openTradeOffer(u1.getId(), u5.getId(), p1.getId());
 		tdao.openTradeOffer(u2.getId(), u3.getId(), p2.getId());
 		tdao.openTradeOffer(u3.getId(), u4.getId(), p3.getId());
+		tdao.openTradeOffer(u1.getId(), u6.getId(), p1.getId());
 		
 	}
 	
@@ -83,7 +87,7 @@ public class TradeTester {
 		
 		try {
 			
-			trades = tdao.fetchTrades(u4.getId());
+			trades = tdao.fetchTrades(u6.getId());
 			
 			if(trades == null)
 				
@@ -93,7 +97,7 @@ public class TradeTester {
 				
 				throw new SQLException("Failed to fetch correct # of records: " + Arrays.toString(trades));
 			
-			assertTrue(trades[0].getTrainer_id1() == u3.getId());
+			assertTrue(trades[0].getTrainer_id1() == u1.getId());
 			
 		} catch(SQLException e) {
 			
@@ -105,24 +109,31 @@ public class TradeTester {
 		
 	}
 	
-	@SuppressWarnings("unlikely-arg-type") //Eclipse ignoring toString()
 	@Test
 	public void updateRequest() {
 		
-		Trade trade = null;
+		Trade[]	trades 	= null;
+		Trade 	trade 	= null;
 		
 		try {
 			
-			trade = tdao.fetchTrades(u4.getId())[0];
+			trades = tdao.fetchTrades(u6.getId());
+			
+			if(trades == null || trades.length == 0)
+				
+				//Fail the test
+				assertTrue(false);
+			
+			trade = trades[0];
 			
 			if(!tdao.updateOffer(trade.getId(), p4.getId()))
 				
 				//Fail test
 				assertTrue(false);
 			
-			trade = tdao.fetchTrades(u4.getId())[0];
+			trade = tdao.fetchTrades(u6.getId())[0];
 			
-			assertTrue(trade.getStatus().equals(TradeStatus.PENDING.toString()) && trade.getPokemon_id2() == p4.getId());
+			assertTrue(TradeStatus.PENDING.equals(trade.getStatus()) && trade.getPokemon_id2() == p4.getId());
 			
 		} catch(SQLException e) {
 			
@@ -133,12 +144,13 @@ public class TradeTester {
 		}
 		
 	}
-	
-	@SuppressWarnings("unlikely-arg-type") //Eclipse ignoring toString()
+
 	@Test
 	public void acceptRequest() {
 		
-		Trade trade = null;
+		PreparedStatement	ps;
+		ResultSet			rs;
+		Trade 				trade = null;
 		
 		try {
 			
@@ -149,9 +161,15 @@ public class TradeTester {
 				//Fail test
 				assertTrue(false);
 			
-			trade = tdao.fetchTrades(u4.getId())[0];
-			
-			assertTrue(trade.getStatus().equals(TradeStatus.ACCEPTED.toString()));
+			try(Connection c = ConnectionUtil.getConnection()) {
+				
+				ps = c.prepareStatement("SELECT status from trade_requests WHERE trade_id = ?");
+				ps.setInt(1, trade.getId());
+				rs = ps.executeQuery();
+				
+				if(rs.next()) assertTrue(TradeStatus.ACCEPTED.toString().equals(rs.getString(1)));
+				
+			} catch(SQLException e) { throw e; }
 			
 		} catch(SQLException e) {
 			
@@ -162,12 +180,13 @@ public class TradeTester {
 		}
 		
 	}
-	
-	@SuppressWarnings("unlikely-arg-type") //Eclipe ignoring toString()
+
 	@Test
 	public void declineRequest() {
 		
-		Trade trade = null;
+		PreparedStatement	ps;
+		ResultSet			rs;
+		Trade 				trade = null;
 		
 		try {
 			
@@ -178,9 +197,15 @@ public class TradeTester {
 				//Fail test
 				assertTrue(false);
 			
-			trade = tdao.fetchTrades(u5.getId())[0];
-			
-			assertTrue(trade.getStatus().equals(TradeStatus.DECLINED.toString()));
+			try(Connection c = ConnectionUtil.getConnection()) {
+				
+				ps = c.prepareStatement("SELECT status from trade_requests WHERE trade_id = ?");
+				ps.setInt(1, trade.getId());
+				rs = ps.executeQuery();
+				
+				if(rs.next()) assertTrue(TradeStatus.DECLINED.toString().equals(rs.getString(1)));
+				
+			} catch(SQLException e) { throw e; }
 			
 		} catch(SQLException e) {
 			
@@ -215,6 +240,11 @@ public class TradeTester {
 			ps.setInt(1, u5.getId());
 			ps.setInt(2, u5.getId());
 			ps.addBatch();
+			ps.setInt(1, u6.getId());
+			ps.setInt(2, u6.getId());
+			ps.addBatch();
+			
+			ps.executeBatch();
 			
 			ps = c.prepareStatement(DEL_PKM);
 			ps.setInt(1, p1.getId());
@@ -225,6 +255,9 @@ public class TradeTester {
 			ps.addBatch();
 			ps.setInt(1, p4.getId());
 			ps.addBatch();
+			
+			ps.executeBatch();
+			
 			ps = c.prepareStatement(DEL_USR);
 			ps.setInt(1, u1.getId());
 			ps.addBatch();
@@ -235,6 +268,8 @@ public class TradeTester {
 			ps.setInt(1, u4.getId());
 			ps.addBatch();
 			ps.setInt(1, u5.getId());
+			ps.addBatch();
+			ps.setInt(1, u6.getId());
 			ps.addBatch();
 			
 			ps.executeBatch();
