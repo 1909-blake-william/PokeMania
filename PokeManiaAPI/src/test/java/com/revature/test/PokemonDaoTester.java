@@ -21,7 +21,8 @@ public class PokemonDaoTester {
 	private static final 	PokemonDaoSql	dao		= PokemonDaoSql.getInstance();
 	private static final	UserDaoSql		uDao	= UserDaoSql.getInstance();
 	private static final	String			RM_POKE	= "DELETE FROM pokemon WHERE pokemon_id = ?",
-											RM_USR	= "DELETE FROM trainers WHERE trainer_id = ";
+											RM_USR	= "DELETE FROM trainers WHERE trainer_id = ?",
+											RM_TM	= "DELETE FROM pokemon_team WHERE trainer_id = ?";
 	private static 			Pokemon			p1,
 											p2,
 											p3,
@@ -43,13 +44,11 @@ public class PokemonDaoTester {
 		uDao.add_TEST_newUser(t1, "pass");
 		uDao.add_TEST_newUser(t2, "pass");
 		uDao.add_TEST_newUser(t3, "pass");
-		System.out.println("Users added");
 		
 		dao.save_TEST_pokemon(p1);
 		dao.save_TEST_pokemon(p2);
 		dao.save_TEST_pokemon(p3);
 		dao.save_TEST_pokemon(p4);
-		System.out.println("Pokes added");
 		
 	}
 	
@@ -139,7 +138,7 @@ public class PokemonDaoTester {
 	@Test
 	public void testSavePokemon() {
 		
-		p5	= new Pokemon(-5, t3.getId(), 0, 0, 0, 0, 0, 0, null, null, null, null);
+		p5	= new Pokemon(-5, t3.getId(), 0, 0, 0, 0, 0, 0, "Fire", null, "img", "Img");
 		
 		try {
 			
@@ -168,6 +167,7 @@ public class PokemonDaoTester {
 		} catch(SQLException e) {
 			
 			//Fail the test
+			System.err.println(e.getMessage());
 			assertTrue(false);
 			
 		}
@@ -256,6 +256,16 @@ public class PokemonDaoTester {
 		PreparedStatement	ps;
 		
 		try(Connection c = ConnectionUtil.getConnection()) {
+			
+			ps = c.prepareStatement(RM_TM);
+			ps.setInt(1, t1.getId());
+			ps.addBatch();
+			ps.setInt(1, t2.getId());
+			ps.addBatch();
+			ps.setInt(1, t3.getId());
+			ps.addBatch();
+			
+			ps.executeBatch();
 			
 			ps = c.prepareStatement(RM_POKE);
 			ps.setInt(1, p1.getId());

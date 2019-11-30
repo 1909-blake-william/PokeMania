@@ -26,7 +26,7 @@ public class PokemonDaoSql implements PokemonDao {
 	
 	private final 			String			GET_ONE_SQL		= "SELECT * FROM pokemon WHERE pokemon_id = ?",
 											GET_ALL_SQL		= "SELECT * FROM pokemon WHERE trainer_id = ?",
-											GET_TEAM_SQL	= "SELECT * FROM pokemon_team WHERE trainer_id = ?",
+											GET_TEAM_SQL	= "SELECT * FROM pokemon WHERE pokemon_id IN (SELECT pokemon_id FROM pokemon_team WHERE trainer_id = ?)",
 											SAVE_ONE_SQL	= "INSERT INTO pokemon (trainer_id, pokedex_id, pokemon_level, "
 															+ "pokemon_hp, pokemon_att, pokemon_def, pokemon_speed, pokemon_type1, "
 															+ "pokemon_type2 front_image, back_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -34,6 +34,7 @@ public class PokemonDaoSql implements PokemonDao {
 											SAVE_TEAM_SQL	= "INSERT INTO pokemon_team VALUES (?, ?)",
 											CLEAR_TEAM_SQL	= "DELETE FROM pokemon_team WHERE trainer_id = ?";
 											
+	private PokemonDaoSql() {};
 	
 	/**
 	 * Fetch the singleton instance of the DAO
@@ -66,21 +67,21 @@ public class PokemonDaoSql implements PokemonDao {
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
 			
+			if(rs.next())
+				
+				pokemon = new Pokemon(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), 
+									  rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getInt(8), 
+									  rs.getString(9), rs.getString(10), rs.getString(11), 
+									  rs.getString(12));
+			
+			return pokemon;
+			
 		} catch(SQLException e) {
 			
 			log.warn("Error: Failed to fetch single pokemon\n" + e.getMessage());
 			throw e;
 			
 		}
-		
-		if(rs.next())
-			
-			pokemon = new Pokemon(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), 
-								  rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getInt(8), 
-								  rs.getString(9), rs.getString(10), rs.getString(11), 
-								  rs.getString(12));
-		
-		return pokemon;
 		
 	}
 
@@ -104,22 +105,21 @@ public class PokemonDaoSql implements PokemonDao {
 			ps.setInt(1, userID);
 			rs = ps.executeQuery();
 			
+			while(rs.next())
+				
+				pokemon.add(new Pokemon(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), 
+						  				rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getInt(8), 
+						  				rs.getString(9), rs.getString(10), rs.getString(11), 
+						  				rs.getString(12)));
+			
+			return pokemon.toArray(new Pokemon[0]);
+			
 		} catch(SQLException e) {
 			
 			log.warn("Error: Failed to fetch team\n" + e.getMessage());
 			throw e;
 			
 		}
-		
-		while(rs.next())
-	
-			//Need table data
-			pokemon.add(new Pokemon(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), 
-					  				rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getInt(8), 
-					  				rs.getString(9), rs.getString(10), rs.getString(11), 
-					  				rs.getString(12)));
-		
-		return (Pokemon[]) pokemon.toArray();
 				
 	}
 
@@ -143,22 +143,21 @@ public class PokemonDaoSql implements PokemonDao {
 			ps.setInt(1, userID);
 			rs = ps.executeQuery();
 			
+			while(rs.next())
+				
+				pokemon.add(new Pokemon(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), 
+										rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getInt(8), 
+										rs.getString(9), rs.getString(10), rs.getString(11), 
+										rs.getString(12)));
+			
+			return pokemon.toArray(new Pokemon[0]);
+			
 		} catch(SQLException e) {
 			
 			log.warn("Error: Failed to fetch all box pokemon\n" + e.getMessage());
 			throw e;
 			
 		}
-		
-		while(rs.next())
-			
-			//Missing table data
-			pokemon.add(new Pokemon(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), 
-									rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getInt(8), 
-									rs.getString(9), rs.getString(10), rs.getString(11), 
-									rs.getString(12)));
-		
-		return (Pokemon[]) pokemon.toArray();
 		
 	}
 
@@ -249,7 +248,6 @@ public class PokemonDaoSql implements PokemonDao {
 	public boolean saveTeam(Pokemon[] pokemon) throws SQLException {
 		
 		PreparedStatement	ps;
-		int[]				results;
 		
 		clearTeam(pokemon[0].getTrainerId());
 		
@@ -267,23 +265,18 @@ public class PokemonDaoSql implements PokemonDao {
 				
 			}
 
-			results = ps.executeBatch();
+			if(ps.executeBatch() != null)
+				
+				return true;
+			
+			return false;
 			
 		} catch(SQLException e) {
 			
-			log.warn("Error: Failed to fetch single pokemon\n" + e.getMessage());
+			log.warn("Error: Failed to save team\n" + e.getMessage());
 			throw e;
 			
 		}
-		
-		//Check if all successful
-		for(int i : results)
-			
-			if(i != 1)
-				
-				return false;
-		
-		return true;
 		
 	}
 	

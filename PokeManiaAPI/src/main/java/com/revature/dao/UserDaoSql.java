@@ -36,6 +36,8 @@ public class UserDaoSql implements UserDao {
 									ADD_FRND		= "INSERT INTO friends VALUES ((SELECT trainer_id FROM trainers WHERE trainer_name = ?), "
 													+ "(SELECT trainer_id FROM trainers WHERE trainer_name = ?))";
 
+	private UserDaoSql() {};
+	
 	/**
 	 * Package private getter for the instance. The instance is meant to be retrieved
 	 * from the interface so that if a different implementation is used to manage data,
