@@ -17,3 +17,15 @@ form {
     flex-direction: column;
 
 }
+
+video {
+
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 25%;
+    height: auto;
+
+}
