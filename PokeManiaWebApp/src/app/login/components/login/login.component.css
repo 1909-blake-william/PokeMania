@@ -1,0 +1,19 @@
+form {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 170px;
+    width: 25%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+
+}
+
+.input {
+
+    display: flex;
+    flex-direction: column;
+
+}

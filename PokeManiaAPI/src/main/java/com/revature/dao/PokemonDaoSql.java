@@ -32,7 +32,8 @@ public class PokemonDaoSql implements PokemonDao {
 															+ "pokemon_type2 front_image, back_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 											SAVE_TEST_SQL	= "INSERT INTO pokemon VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 											SAVE_TEAM_SQL	= "INSERT INTO pokemon_team VALUES (?, ?)",
-											CLEAR_TEAM_SQL	= "DELETE FROM pokemon_team WHERE trainer_id = ?";
+											CLEAR_TEAM_SQL	= "DELETE FROM pokemon_team WHERE trainer_id = ?",
+											RM_POKE			= "DELETE FROM pokemon WHERE pokemon_id = ?";
 											
 	private PokemonDaoSql() {};
 	
@@ -299,6 +300,33 @@ public class PokemonDaoSql implements PokemonDao {
 		} catch(SQLException e) {
 			
 			log.warn("Error: Failed to clear last saved team\n" + e.getMessage());
+			throw e;
+			
+		}
+		
+	}
+	
+	/**
+	 * Release a pokemon (delete from db)
+	 * 
+	 * @param The pokemon to be released
+	 * @return Whether release was successful
+	 * @exception If there's an issue talking with the database a SQLException is thrown
+	 */
+	public boolean releasePoke(Pokemon pokemon) throws SQLException {
+		
+		PreparedStatement ps;
+		
+		try(Connection c = ConnectionUtil.getConnection()) {
+			
+			ps = c.prepareStatement(RM_POKE);
+			ps.setInt(1, pokemon.getId());
+			
+			return ps.executeUpdate() == 1;
+			
+		} catch(SQLException e) {
+			
+			log.warn("Error: Failed to release pokemon" + e.getMessage());
 			throw e;
 			
 		}

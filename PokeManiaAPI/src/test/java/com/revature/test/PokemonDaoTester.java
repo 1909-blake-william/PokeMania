@@ -250,6 +250,22 @@ public class PokemonDaoTester {
 		
 	}
 	
+	@Test
+	public void deletePoke() {
+		
+		try {
+			
+			assertTrue(dao.releasePoke(p3));
+			
+		} catch(SQLException e) {
+			
+			//Fail the test
+			assertTrue(false);
+			
+		}
+		
+	}
+	
 	@AfterClass
 	public static void cleanUp() throws SQLException {
 		
@@ -272,9 +288,6 @@ public class PokemonDaoTester {
 			ps.addBatch();
 			ps.clearParameters();
 			ps.setInt(1, p2.getId());
-			ps.addBatch();
-			ps.clearParameters();
-			ps.setInt(1, p3.getId());
 			ps.addBatch();
 			ps.clearParameters();
 			ps.setInt(1, p4.getId());
