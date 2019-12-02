@@ -10,7 +10,9 @@ public final class Password {
 	/**
 	 * Used to transform the human readable password into unreadable. The unreadable password
 	 * can be put back through this method to return the original password.
-	 * @param pswd: The password to be transformed
+	 * 
+	 * @param pswd The password to be transformed
+	 * @param key Usually the username. Some unique string each user has
 	 * @return Transformed password
 	 */
 	public static String transformPasswd(String pswd, String key) {
@@ -49,7 +51,7 @@ public final class Password {
 	 * string. Must start with a letter. Must contain letters and numbers.
 	 * Must be at least 8 chars long
 	 * 
-	 * @param pswd: The password to be tested
+	 * @param pswd The password to be tested
 	 * @return Whether the password is good or not
 	 */
 	public static boolean isSecure(String pswd) {

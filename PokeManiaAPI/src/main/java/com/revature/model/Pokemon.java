@@ -1,5 +1,10 @@
 package com.revature.model;
 
+/**
+ * A model that holds all the relevant data of a pokemon for PokeMania
+ * 
+ * @author Kristoffer Spencer
+ */
 public class Pokemon {
 	
 	private int		id,
