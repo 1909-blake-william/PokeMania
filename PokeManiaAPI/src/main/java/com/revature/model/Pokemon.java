@@ -8,7 +8,7 @@ package com.revature.model;
 public class Pokemon {
 	
 	private int		id,
-					trainerId,
+					trainerID,
 					dexNum,
 					level,
 					hp,
@@ -23,7 +23,7 @@ public class Pokemon {
 			String type2, String frontImg, String backImg) {
 		super();
 		this.id = id;
-		this.trainerId = trainerId;
+		this.trainerID = trainerId;
 		this.dexNum = dexNum;
 		this.level = level;
 		this.hp = hp;
@@ -42,10 +42,10 @@ public class Pokemon {
 		this.id = id;
 	}
 	public int getTrainerId() {
-		return trainerId;
+		return trainerID;
 	}
 	public void setTrainerId(int trainerId) {
-		this.trainerId = trainerId;
+		this.trainerID = trainerId;
 	}
 	public int getDexNum() {
 		return dexNum;
@@ -129,7 +129,7 @@ public class Pokemon {
 	}
 	@Override
 	public String toString() {
-		return "Pokemon [id=" + id + ", trainerId=" + trainerId + ", dexNum=" + dexNum + ", level=" + level + ", hp="
+		return "Pokemon [id=" + id + ", trainerId=" + trainerID + ", dexNum=" + dexNum + ", level=" + level + ", hp="
 				+ hp + ", att=" + att + ", def=" + def + ", spd=" + spd + ", type1=" + type1 + ", type2=" + type2
 				+ ", frontImg=" + frontImg + ", backImg=" + backImg + "]";
 	}

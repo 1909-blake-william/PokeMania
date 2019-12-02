@@ -1,5 +1,4 @@
-//String username, String firstname, String lastname, int id, int badges, int wins, int losses
-
+//Model that matches the Java model for the server to hold data about our logged in user
 export class User {
 
     private _username: string
@@ -9,6 +8,18 @@ export class User {
     private _badges: number
     private _wins: number
     private _losses: number
+
+    constructor(username: string, firstname: string, lastname: string, id: number, badges: number, wins: number, losses: number) {
+
+        this._username = username
+        this._firstname = firstname
+        this._lastname = lastname
+        this._id = id
+        this._badges = badges
+        this._wins = wins
+        this._losses = losses
+
+    }
 
     get username(): string { return this._username }
     set username(uname: string) { this._username = uname }
