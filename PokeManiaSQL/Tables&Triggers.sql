@@ -55,7 +55,9 @@ CREATE OR REPLACE TRIGGER trainer_id_trig
 BEFORE INSERT ON trainers
 FOR EACH ROW
 BEGIN
+IF :new.trainer_id > -1 THEN
     SELECT trainer_id_seq.nextval INTO :new.trainer_id FROM dual;
+END IF;
 END;
 
 
@@ -63,7 +65,9 @@ CREATE OR REPLACE TRIGGER pokemon_id_trig
 BEFORE INSERT ON pokemon
 FOR EACH ROW
 BEGIN
+IF :new.pokemon_id > 0 THEN
     SELECT pokemon_id_seq.nextval INTO :new.pokemon_id FROM dual;
+END IF;
 END;
 
 
@@ -73,9 +77,3 @@ FOR EACH ROW
 BEGIN
     SELECT trade_id_seq.nextval INTO :new.trade_id FROM dual;
 END;
-
-
---
-
-
-
