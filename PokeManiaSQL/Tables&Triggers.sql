@@ -57,6 +57,8 @@ FOR EACH ROW
 BEGIN
 IF :new.trainer_id > -1 THEN
     SELECT trainer_id_seq.nextval INTO :new.trainer_id FROM dual;
+ELSIF :new.trainer_id IS NULL THEN
+    SELECT trainer_id_seq.nextval INTO :new.trainer_id FROM dual;
 END IF;
 END;
 
@@ -66,6 +68,8 @@ BEFORE INSERT ON pokemon
 FOR EACH ROW
 BEGIN
 IF :new.pokemon_id > 0 THEN
+    SELECT pokemon_id_seq.nextval INTO :new.pokemon_id FROM dual;
+ELSIF :new.pokemon_id IS NULL THEN
     SELECT pokemon_id_seq.nextval INTO :new.pokemon_id FROM dual;
 END IF;
 END;
@@ -77,3 +81,10 @@ FOR EACH ROW
 BEGIN
     SELECT trade_id_seq.nextval INTO :new.trade_id FROM dual;
 END;
+
+--INSERT INTO trainers
+--(trainer_id,trainer_name,trainer_password,first_name,last_name,badges,wins, losses)
+--VALUES(-199,'kkkkyyyykris','pass','him','me',0,0,0);
+    
+--DELETE FROM trainers;
+    

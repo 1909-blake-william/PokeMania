@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "PokeMania": {
+    "PokeManiaWebApp": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/PokeMania",
+            "outputPath": "dist/PokeManiaWebApp",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -63,18 +63,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "PokeMania:build"
+            "browserTarget": "PokeManiaWebApp:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "PokeMania:build:production"
+              "browserTarget": "PokeManiaWebApp:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "PokeMania:build"
+            "browserTarget": "PokeManiaWebApp:build"
           }
         },
         "test": {
@@ -111,15 +111,15 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "PokeMania:serve"
+            "devServerTarget": "PokeManiaWebApp:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "PokeMania:serve:production"
+              "devServerTarget": "PokeManiaWebApp:serve:production"
             }
           }
         }
       }
     }},
-  "defaultProject": "PokeMania"
+  "defaultProject": "PokeManiaWebApp"
 }
