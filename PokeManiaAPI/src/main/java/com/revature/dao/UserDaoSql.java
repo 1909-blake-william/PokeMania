@@ -11,7 +11,6 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.revature.model.LoginForm;
 import com.revature.model.User;
 import com.revature.util.ConnectionUtil;
 import com.revature.util.Password;
@@ -194,14 +193,14 @@ public class UserDaoSql implements UserDao {
 	 * 
 	 * @param username of the user logging in
 	 * @param password of the user logging in
-	 * @return LoginForm an object containing both the inputs or null upon failure of login
+	 * @return user job of the logged in user or null on auth failure
 	 * @exception SQLException thrown if failure talking with db
 	 */
-	public LoginForm login(String username, String password) throws SQLException {
-		
+	public User login(String username, String password) throws SQLException {
+			
+		User 				user = null;
 		PreparedStatement	ps;
 		ResultSet			rs;
-		LoginForm			form		= null;
 		
 		try(Connection c = ConnectionUtil.getConnection()) {
 			
@@ -213,7 +212,8 @@ public class UserDaoSql implements UserDao {
 				
 				if(password.equals(Password.transformPasswd(rs.getString(1), username)));
 			
-					form = new LoginForm(username, rs.getString(1));
+					user = this.fetchUser(username);
+			
 			
 		} catch(SQLException e) {
 			
@@ -221,7 +221,7 @@ public class UserDaoSql implements UserDao {
 			
 		}
 		
-		return form;
+		return user;
 		
 	}
 

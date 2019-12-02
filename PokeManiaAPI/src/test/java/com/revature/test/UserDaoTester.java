@@ -11,7 +11,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.revature.dao.UserDao;
+import com.revature.dao.UserDaoSql;
 import com.revature.model.User;
 import com.revature.util.ConnectionUtil;
 
@@ -26,15 +26,15 @@ public class UserDaoTester {
 								 RM_TST_FRN	= "DELETE FROM friends WHERE trainer_id1 = (SELECT trainer_id FROM trainers WHERE trainer_name = ?)"
 											+ " AND trainer_id2 = (SELECT trainer_id FROM trainers WHERE trainer_name = ?)",
 								 GET_ID		= "SELECT trainer_id FROM trainers WHERE trainer_name = ?";
-	private static		 User	 u1;
-	private static 	 	 UserDao dao 		= UserDao.currentImplementation;
+	private static		 User	 u2;
+	private static 	 	 UserDaoSql dao 		= UserDaoSql.getInstance();
 	
 	@BeforeClass
 	public static void addTestUser() throws SQLException {
 		
-			u1 = new User(TEST_USRNM2, "Bob", "Man", -1, 0, 0, 0);
+			u2 = new User(TEST_USRNM2, "Bob", "Man", -2, 0, 0, 0);
 		
-			dao.addNewUser(u1, TEST_PSWD);
+			dao.add_TEST_newUser(u2, TEST_PSWD);
 			dao.addNewUser(new User(TEST_USRNM3, "Bob", "Man", 0, 0, 0, 0), TEST_PSWD);
 			dao.addNewUser(new User(TEST_USRNM4, "Bob", "Man", 0, 0, 0, 0), TEST_PSWD);
 		
@@ -207,11 +207,11 @@ public class UserDaoTester {
 	@Test
 	public void updateStats() {
 		
-		u1.setWins(7);
+		u2.setWins(7);
 		
 		try {
 			
-			assertTrue(dao.updateStats(u1));
+			assertTrue(dao.updateStats(u2));
 			
 		} catch (SQLException e) {
 			

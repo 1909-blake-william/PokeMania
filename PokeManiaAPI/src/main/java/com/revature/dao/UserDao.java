@@ -2,7 +2,6 @@ package com.revature.dao;
 
 import java.sql.SQLException;
 
-import com.revature.model.LoginForm;
 import com.revature.model.User;
 
 /**
@@ -18,7 +17,7 @@ public interface UserDao {
 	User 	fetchUser(String username) throws SQLException;
 	boolean	addNewUser(User user, String password) throws SQLException;
 	boolean	addFriend(String username, String friendName) throws SQLException;
-	LoginForm login(String username, String password) throws SQLException;
+	User login(String username, String password) throws SQLException;
 	String[] getFriends(int userID) throws SQLException;
 	boolean	updateStats(User user) throws SQLException;
 	
