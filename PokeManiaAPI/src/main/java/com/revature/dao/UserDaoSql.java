@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.revature.model.LoginForm;
 import com.revature.model.User;
 import com.revature.util.ConnectionUtil;
 import com.revature.util.Password;
@@ -30,11 +31,12 @@ public class UserDaoSql implements UserDao {
 									INSERT_USER_SQL	= "INSERT INTO trainers (trainer_name, trainer_password, first_name, last_name, badges, wins, losses)"
 													+ " VALUES (?, ?, ?, ?, ?, ?, ?)",
 									INSERT_TEST_SQL	= "INSERT INTO trainers VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-									FETCH_PSWD_SQL	= "SELECT trainer_password FROM trainers WHERE trainer_name = ?",
+									LOGIN_SQL		= "SELECT trainer_password FROM trainers WHERE trainer_name = ?",
 									FETCH_FRND_IDS	= "SELECT * FROM friends WHERE trainer_id1 = ? OR trainer_id2 = ?",
 									FETCH_FRND_NMS	= "SELECT trainer_name FROM trainers WHERE trainer_id = ",
 									ADD_FRND		= "INSERT INTO friends VALUES ((SELECT trainer_id FROM trainers WHERE trainer_name = ?), "
-													+ "(SELECT trainer_id FROM trainers WHERE trainer_name = ?))";
+													+ "(SELECT trainer_id FROM trainers WHERE trainer_name = ?))",
+									UPDATE_STATS	= "UPDATE trainers SET badges = ?, wins = ?, losses = ? WHERE trainer_id = ?";
 
 	private UserDaoSql() {};
 	
@@ -188,38 +190,38 @@ public class UserDaoSql implements UserDao {
 	}
 
 	/**
-	 * Get the password for the username to check if login is valid
 	 * 
-	 * @param The username that matches the password
-	 * @return The password that matches with the username
-	 * @exception Error if reading the db fails
+	 * 
+	 * @param username of the user logging in
+	 * @param password of the user logging in
+	 * @return LoginForm an object containing both the inputs or null upon failure of login
+	 * @exception SQLException thrown if failure talking with db
 	 */
-	@Override
-	public String getPassword(String username) throws SQLException {
+	public LoginForm login(String username, String password) throws SQLException {
 		
-		PreparedStatement	ps	= null;
-		ResultSet			rs	= null;
+		PreparedStatement	ps;
+		ResultSet			rs;
+		LoginForm			form		= null;
 		
 		try(Connection c = ConnectionUtil.getConnection()) {
 			
-			ps = c.prepareStatement(FETCH_PSWD_SQL);
+			ps = c.prepareStatement(LOGIN_SQL);
 			ps.setString(1, username);
 			rs = ps.executeQuery();
 			
 			if(rs.next())
 				
-				return Password.transformPasswd(rs.getString(1), username);
+				if(password.equals(Password.transformPasswd(rs.getString(1), username)));
 			
-			else
-				
-				throw new SQLException("Unable to find user in db");
+					form = new LoginForm(username, rs.getString(1));
 			
 		} catch(SQLException e) {
 			
-			logger.warn("Error: Failed to retrieve password for user: " + username + "\n" + e.getMessage());
-			throw e;
+			logger.warn("Error fetching user creds from db\n" + e.getMessage());
 			
 		}
+		
+		return form;
 		
 	}
 
@@ -348,6 +350,37 @@ public class UserDaoSql implements UserDao {
 		} catch(SQLException e) {
 			
 			logger.warn("Error: Failed to fetch friends\n" + e.getMessage());
+			throw e;
+			
+		}
+		
+	}
+	
+	/**
+	 * This method takes a user object and updates the badges, wins and losses
+	 * in the db to the current numbers given by the passed in user obj
+	 * 
+	 * @param user the user object which contains the states
+	 * @return Returns whether only one record was updated
+	 * @exception SQLException thrown if issue talking with db
+	 */
+	public boolean	updateStats(User user) throws SQLException {
+		
+		PreparedStatement	ps;
+		
+		try(Connection c = ConnectionUtil.getConnection()) {
+			
+			ps = c.prepareStatement(UPDATE_STATS);
+			ps.setInt(1, user.getBadges());
+			ps.setInt(2, user.getWins());
+			ps.setInt(3, user.getLosses());
+			ps.setInt(4, user.getId());
+			
+			return ps.executeUpdate() == 1;
+			
+		} catch(SQLException e) {
+			
+			logger.warn("Failed to update stats\n" + e.getMessage());
 			throw e;
 			
 		}

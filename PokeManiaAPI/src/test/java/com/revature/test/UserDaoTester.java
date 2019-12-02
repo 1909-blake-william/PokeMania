@@ -26,12 +26,15 @@ public class UserDaoTester {
 								 RM_TST_FRN	= "DELETE FROM friends WHERE trainer_id1 = (SELECT trainer_id FROM trainers WHERE trainer_name = ?)"
 											+ " AND trainer_id2 = (SELECT trainer_id FROM trainers WHERE trainer_name = ?)",
 								 GET_ID		= "SELECT trainer_id FROM trainers WHERE trainer_name = ?";
+	private static		 User	 u1;
 	private static 	 	 UserDao dao 		= UserDao.currentImplementation;
 	
 	@BeforeClass
 	public static void addTestUser() throws SQLException {
-			
-			dao.addNewUser(new User(TEST_USRNM2, "Bob", "Man", 0, 0, 0, 0), TEST_PSWD);
+		
+			u1 = new User(TEST_USRNM2, "Bob", "Man", -1, 0, 0, 0);
+		
+			dao.addNewUser(u1, TEST_PSWD);
 			dao.addNewUser(new User(TEST_USRNM3, "Bob", "Man", 0, 0, 0, 0), TEST_PSWD);
 			dao.addNewUser(new User(TEST_USRNM4, "Bob", "Man", 0, 0, 0, 0), TEST_PSWD);
 		
@@ -70,11 +73,11 @@ public class UserDaoTester {
 	}
 	
 	@Test
-	public void getPassword() {
+	public void getLoginTest() {
 		
 		try {
 			
-			assertTrue(TEST_PSWD.equals(dao.getPassword(TEST_USRNM2)));
+			assertTrue(dao.login(TEST_USRNM2, TEST_PSWD) != null);
 			
 		} catch(SQLException e) {
 			
@@ -197,6 +200,24 @@ public class UserDaoTester {
 			//Fail the test
 			assertTrue(false);
 			
+		}
+		
+	}
+	
+	@Test
+	public void updateStats() {
+		
+		u1.setWins(7);
+		
+		try {
+			
+			assertTrue(dao.updateStats(u1));
+			
+		} catch (SQLException e) {
+			
+			//Fail the test
+			assertTrue(false);
+
 		}
 		
 	}
