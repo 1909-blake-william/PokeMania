@@ -1,13 +1,14 @@
 <form>
+    <h6 id="error" *ngIf="errorExists">{{errorMsg}}</h6>
     <div class="input">
         <label for="username">Username</label>
-        <input type="text" name="username" id="username-input">
+        <input [(ngModel)]="username" type="text" name="username" id="username-input" placeholder="Trainer42">
     </div>
     <div class="input">
         <label for="password">Password</label>
-        <input type="password" name="password" id="password-input">
+        <input [(ngModel)]="password" type="password" name="password" id="password-input" placeholder="p4ssw0rd">
     </div>
-    <button type="button">Sign in</button>
+    <button (click)="login()" type="button">Sign in</button>
 </form>
 
 <video autoplay loop>
