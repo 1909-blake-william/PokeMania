@@ -19,7 +19,8 @@ public class PokemonDispatcher implements Dispatcher {
 	@Override
 	public boolean supports(HttpServletRequest request) {
 		return 	isViewAllUsersPokemon(request) ||
-				isCatchPokemon(request);
+				isCatchPokemon(request) ||
+				isReleasePokemon(request);
 	}
 
 	@Override
@@ -29,20 +30,21 @@ public class PokemonDispatcher implements Dispatcher {
 		} else if (isCatchPokemon(request)) {
 			PokemonHandler.handleCatchPokemon(request, response);
 		} else if (isReleasePokemon(request)) {
-			
+			PokemonHandler.handleReleasePokemon(request, response);
 		} 
 	}
 
 	public boolean isViewAllUsersPokemon(HttpServletRequest request) {
-		return request.getMethod().equals("GET") && request.getRequestURI().equals("/PokeManiaAPI/pokemon");
+		return request.getMethod().equals("GET") && request.getRequestURI().equals("/PokeManiaAPI/api/pokemon");
 	}
 
 	public boolean isCatchPokemon(HttpServletRequest request) {
-		return request.getMethod().contentEquals("POST") && request.getRequestURI().equals("/PokeManiaAPI/pokemon");
+		return request.getMethod().contentEquals("POST") && request.getRequestURI().equals("/PokeManiaAPI/api/pokemon");
 	}
 
 	public boolean isReleasePokemon(HttpServletRequest request) {
-		return request.getMethod().contentEquals("DELETE") && request.getRequestURI().equals("PokeManiaAPI/pokemon");
+		logger.info("Inside Delete Request");
+		return request.getMethod().contentEquals("DELETE") && request.getRequestURI().equals("/PokeManiaAPI/api/pokemon");
 	}
 
 }

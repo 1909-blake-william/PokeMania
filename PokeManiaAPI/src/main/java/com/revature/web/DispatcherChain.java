@@ -14,8 +14,8 @@ public class DispatcherChain implements Dispatcher {
 	private DispatcherChain() {
 		this.dispatchers = new ArrayList<>();
 		this.dispatchers.add(new AuthDispatcher());
-
-		
+		this.dispatchers.add(new PokemonDispatcher());
+		this.dispatchers.add(new TradeRequestDispatcher());
 	}
 
 	@Override
@@ -35,7 +35,6 @@ public class DispatcherChain implements Dispatcher {
 				d.execute(request, response);
 			}
 		}
-
 	}
 	
 	public static DispatcherChain getInstance() {
