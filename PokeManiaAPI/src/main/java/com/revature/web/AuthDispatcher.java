@@ -1,6 +1,7 @@
 package com.revature.web;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +36,6 @@ public class AuthDispatcher implements Dispatcher {
 			// INTO Object of type LoginForm (found in com.revature.model.LoginForm)
 			LoginForm form = (LoginForm) Json.read(request.getInputStream(), LoginForm.class);
 
-			//FIX THIS LOGIN METHOD!
 			User info = userDao.login(form.getUsername(), form.getPassword());
 
 			if (info != null) {
@@ -52,6 +52,8 @@ public class AuthDispatcher implements Dispatcher {
 			}
 
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
