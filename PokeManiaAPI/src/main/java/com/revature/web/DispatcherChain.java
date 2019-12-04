@@ -16,6 +16,7 @@ public class DispatcherChain implements Dispatcher {
 		this.dispatchers.add(new AuthDispatcher());
 		this.dispatchers.add(new PokemonDispatcher());
 		this.dispatchers.add(new TradeRequestDispatcher());
+		this.dispatchers.add(new UserDispatcher());
 	}
 
 	@Override
