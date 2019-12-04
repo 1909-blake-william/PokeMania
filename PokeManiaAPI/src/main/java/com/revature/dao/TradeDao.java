@@ -4,6 +4,12 @@ import java.sql.SQLException;
 
 import com.revature.model.Trade;
 
+/**
+ * Interface for the tradeDao that repersents the tasks to be accomplished and establishes
+ * the way to talk to this dao
+ * 
+ * @author Kristoffer Spencer
+ */
 public interface TradeDao {
 	
 	TradeDao currentImplementation 	= TradeDaoSql.getInstance();

@@ -1,5 +1,10 @@
 package com.revature.model;
 
+/**
+ * A model to represent a user of the system. (A trainer, as known to the game)
+ * 
+ * @author Kristoffer Spencer
+ */
 public class User {
 	
 	private	String	username,
