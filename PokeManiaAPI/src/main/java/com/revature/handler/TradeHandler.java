@@ -36,7 +36,8 @@ public class TradeHandler {
 			}
 		} catch (IOException | SQLException e) {
 			logger.warn("Error inside Handler Trade Request {}", e);
-			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return;
 		}
 	}
 
@@ -74,6 +75,8 @@ public class TradeHandler {
 			}
 		} catch (IOException | SQLException e) {
 			logger.warn("Exception {} encountered in handleUpdateTradeRequest", e );
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return;
 		}
 	}
 	
@@ -93,6 +96,8 @@ public class TradeHandler {
 			}
 		} catch (IOException | SQLException e) {
 			logger.warn("Exception {} encountered in handleUpdateTradeOffer", e);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return;
 		}
 	}
 }

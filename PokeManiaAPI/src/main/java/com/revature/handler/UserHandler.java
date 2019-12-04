@@ -2,6 +2,7 @@ package com.revature.handler;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +22,6 @@ public class UserHandler {
 	
 	public static void handleCreateUserRequest(HttpServletRequest request, HttpServletResponse response) {
 		logger.info("Inside Create User Request");
-		
 		try {
 			User user = (User) Json.read(request.getInputStream(), User.class);
 			String password = request.getParameter("password");
@@ -34,11 +34,57 @@ public class UserHandler {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				logger.info("New User NOT Created. Bad Request");
 				return;
+			}		
+		} catch (IOException | SQLException e) {
+			logger.warn("Exception occured: {}", e);
+			return;
+		}
+	}
+
+	public static void handleAddFriend(HttpServletRequest request, HttpServletResponse response) {
+		logger.info("Inside the Add Friend Request Handler");
+		logger.info("Friend username: {}", request.getParameter("friendusername"));
+		try {
+			User user = (User) Json.read(request.getInputStream(), User.class);
+			String friendUsername = request.getParameter("friendusername");
+			boolean wasSuccessful = dao.addFriend(user.getUsername(), friendUsername);
+			if(wasSuccessful) {
+				response.setStatus(HttpServletResponse.SC_CREATED);
+				logger.info("Added new friend. Congratulations. You're not a loser.");
+				return;
+			} else {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				logger.info("Unable to add friend. Bad Request");
+				return;
 			}
 			
 		} catch (IOException | SQLException e) {
-			logger.warn("Exception occured: {}", e);
+			logger.warn("Exception encountered in Add Friend Handler: {}", e);
+			return;
 		}
+	}
+	
+	public static void handleGetFriends(HttpServletRequest request, HttpServletResponse response) {
+		logger.info("Inside the Get Friends UserHandler");
+		int userId = Integer.parseInt(request.getParameter("userid"));
+		logger.info("Your user ID is: {}", userId);
+		try {
+			String[] friends = dao.getFriends(userId);
+			if(friends.length == 0) {
+				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+			} else {
+				response.setContentType(Json.CONTENT_TYPE);
+				response.getOutputStream().write(Json.write(friends));
+				return;
+			}
+			
+		} catch (SQLException | IOException e) {
+			logger.warn("Exception was thrown: {}", e);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
+		
+		
 	}
 	
 }
