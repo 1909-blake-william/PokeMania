@@ -2,9 +2,9 @@
 
 # AuthDispatcher
 
-### Login
-### Method: POST
-### Endpoint: /PokeManiaAPI/api/login
+* Login
+* Method: POST
+* Endpoint: /PokeManiaAPI/api/login
 
 ## Info - Get info about current user sesson
 ### Method: GET
