@@ -87,4 +87,6 @@ END;
 --VALUES(-199,'kkkkyyyykris','pass','him','me',0,0,0);
     
 --DELETE FROM trainers;
+
+
     
