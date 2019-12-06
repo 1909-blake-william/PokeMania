@@ -1,28 +1,28 @@
 # PokeMania EndPoints
 
-### AuthDispatcher
+# AuthDispatcher
 
-# Login
-# Method: POST
-# Endpoint: /PokeManiaAPI/api/login
+### Login
+### Method: POST
+### Endpoint: /PokeManiaAPI/api/login
 
-# Info - Get info about current user sesson
-# Method: GET
-# Endpoint: /PokeManiaAPI/api/info
+## Info - Get info about current user sesson
+### Method: GET
+### Endpoint: /PokeManiaAPI/api/info
 
-### UserDispatcher
+# UserDispatcher
 
-# CREATE USER
-# Method: POST
-# Endpoint: /PokeManiaAPI/api/createuser?password={insert password here}
+### CREATE USER
+### Method: POST
+### Endpoint: /PokeManiaAPI/api/createuser?password={insert password here}
 
-# ADD FRIEND
-# Method: POST
-# Endpoint: /PokeManiaAPI/api/addfriend?friendusername={Insert friend username here}
+### ADD FRIEND
+### Method: POST
+### Endpoint: /PokeManiaAPI/api/addfriend?friendusername={Insert friend username here}
 
-# GET FRIENDS
-# Method: GET
-# Endpoint: /PokeManiaAPI/api/getfriends?userid={insert the user ID}
+### GET FRIENDS
+### Method: GET
+### Endpoint: /PokeManiaAPI/api/getfriends?userid={insert the user ID}
 
 ### PokemonDispatcher
 
