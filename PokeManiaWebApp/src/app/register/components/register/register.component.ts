@@ -94,13 +94,13 @@ export class RegisterComponent implements OnInit {
 
     this.clearErrors()
 
-    if(!this.username) {
+    if(!this.username || this.username.indexOf(' ') !== -1 || this.username.length > 50) {
       
       this.usernameError = true
       allGood = false
 
     }
-    if(!this.password1 || !this.goodPassword()) {
+    if(!this.password1 || !this.goodPassword() || this.password1.length > 50) {
 
       this.passwordError = true
       allGood = false
@@ -150,7 +150,7 @@ export class RegisterComponent implements OnInit {
     if(this.usernameError) {
 
       this.showError = true
-      this.errorMsg = 'Username cannot be blank'
+      this.errorMsg = 'Username cannot be blank, have spaces, or be over 50 characters long'
 
     }
 
@@ -161,7 +161,7 @@ export class RegisterComponent implements OnInit {
     if(this.passwordError) {
 
       this.showError = true
-      this.errorMsg = 'Password must have at least 1 lowercase, 1 uppercase, 1 number, and 8 characters in total'
+      this.errorMsg = 'Password must have at least 1 lowercase, 1 uppercase, 1 number, and 8 characters in total. Password also cannot be more than 50 characters'
 
     }
 

@@ -2,15 +2,15 @@
     <form>
         <div class="input" (mouseenter)="showUsernameError()" (mouseleave)="clearError()">
             <label for="username">Username<span class="red">*</span></label>
-            <input [(ngModel)]="username" [style.background-color]="usernameError ? 'rgba(255,0,0,0.4)' : 'white'" type="text" name="username" id="username-input">
+            <input [(ngModel)]="username" [style.background-color]="usernameError ? 'rgba(255,0,0,0.7)' : 'white'" type="text" name="username" id="username-input">
         </div>
         <div class="input">
             <label for="password1">Password<span class="red">*</span></label>
-            <input [(ngModel)]="password1" [style.background-color]="passwordError ? 'rgba(255,0,0,0.4)' : 'white'" (mouseenter)="showpasswordError()" (mouseleave)="clearError()" type="password" name="password1" id="password1-input">
+            <input [(ngModel)]="password1" [style.background-color]="passwordError ? 'rgba(255,0,0,0.7)' : 'white'" (mouseenter)="showpasswordError()" (mouseleave)="clearError()" type="password" name="password1" id="password1-input">
         </div>
         <div class="input" (mouseenter)="showpassword2Error()" (mouseleave)="clearError()">
             <label for="password2">Verify password<span class="red">*</span></label>
-            <input [(ngModel)]="password2" [style.background-color]="password2Error ? 'rgba(255,0,0,0.4)' : 'white'" type="password" name="password2" id="password2-input">
+            <input [(ngModel)]="password2" [style.background-color]="password2Error ? 'rgba(255,0,0,0.7)' : 'white'" type="password" name="password2" id="password2-input">
         </div>
         <div class="input">
             <label for="firstname">Firstname</label>
@@ -22,7 +22,7 @@
         </div>
         <div class="input" (mouseenter)="showPokemonError()" (mouseleave)="clearError()">
             <label for="starter">Pick a starter pokemon<span class="red">*</span></label>
-            <select [(ngModel)]="pokemon" [style.background-color]="pokemonError ? 'rgba(255,0,0,0.4)' : 'white'" name="starter" id="starter-input">
+            <select [(ngModel)]="pokemon" [style.background-color]="pokemonError ? 'rgba(255,0,0,0.7)' : 'white'" name="starter" id="starter-input">
                 <option value=1>Bulbasaur</option>
                 <option value=4>Charmander</option>
                 <option value=7>Squirtle</option>
