@@ -38,7 +38,6 @@ public class TradeRequestDispatcher implements Dispatcher {
 	}
 
 	public boolean isPatchTradeRequest(HttpServletRequest request) {
-		logger.info("Status: {}", request.getParameter("status"));
 		return request.getMethod().equals("PATCH") && request.getRequestURI().equals("/PokeManiaAPI/api/traderequest")
 				&& request.getParameter("status") != null;
 	}

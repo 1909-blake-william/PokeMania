@@ -20,14 +20,15 @@ public class PokemonHandler {
 	private static final Logger logger = LogManager.getLogger(PokemonHandler.class);
 
 	public static void handleViewAllUsersPokemon(HttpServletRequest request, HttpServletResponse response) {
-		String[] path = request.getRequestURI().split("/");
-		int userId = Integer.parseInt(path[path.length - 1]);
+		String userId = request.getParameter("userId");
+		logger.warn("User ID: {}", userId);
 		try {
-			Pokemon[] pokemon = dao.fetchBox(userId);
+			Pokemon[] pokemon = dao.fetchBox(Integer.parseInt(userId));
 			if (pokemon != null) {
 				try {
 					response.setContentType(Json.CONTENT_TYPE);
 					response.getOutputStream().write(Json.write(pokemon));
+					return;
 				} catch (IOException e) {
 					logger.warn("Failed to write to Response Body: {}", e);
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

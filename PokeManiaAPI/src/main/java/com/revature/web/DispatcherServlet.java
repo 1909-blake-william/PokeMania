@@ -21,6 +21,7 @@ public class DispatcherServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		logger.info("GET");
 		logger.info("{} request coming to {}", req.getMethod(), req.getRequestURI());
 		if (dispatcherChain.supports(req)) {
 			dispatcherChain.execute(req, resp);
@@ -32,6 +33,7 @@ public class DispatcherServlet extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		logger.info("POST");
 		logger.info("{} request coming to {}", req.getMethod(), req.getRequestURI());
 		if (dispatcherChain.supports(req)) {
 			dispatcherChain.execute(req, resp);
@@ -43,6 +45,7 @@ public class DispatcherServlet extends HttpServlet {
 
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		logger.info("DELETE");
 		logger.info("{} request coming to {}", req.getMethod(), req.getRequestURI());
 		if (dispatcherChain.supports(req)) {
 			dispatcherChain.execute(req, resp);
@@ -54,6 +57,7 @@ public class DispatcherServlet extends HttpServlet {
 
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		logger.info("PUT");
 		logger.info("{} request coming to {}", req.getMethod(), req.getRequestURI());
 		if (dispatcherChain.supports(req)) {
 			dispatcherChain.execute(req, resp);
@@ -65,6 +69,7 @@ public class DispatcherServlet extends HttpServlet {
 
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		logger.info("PATCH SERVICE");
 		if (req.getMethod().equals("PATCH")) {
 			doPatch(req, resp);
 		} else {
