@@ -18,13 +18,17 @@ public class PokemonDispatcher implements Dispatcher {
 
 	@Override
 	public boolean supports(HttpServletRequest request) {
-		return isViewAllUsersPokemon(request) || isCatchPokemon(request) || isReleasePokemon(request);
+		return isViewUsersPokemon(request) || isViewUsersTeam(request) || isUpdateUsersTeam(request) || isCatchPokemon(request) || isReleasePokemon(request);
 	}
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
-		if (isViewAllUsersPokemon(request)) {
+		if (isViewUsersPokemon(request)) {
 			PokemonHandler.handleViewAllUsersPokemon(request, response);
+		} else if (isViewUsersTeam(request)) {
+			PokemonHandler.handleViewAllUsersTeam(request, response);
+		} else if (isUpdateUsersTeam(request)){
+			PokemonHandler.handleUpdateUsersTeam(request, response);
 		} else if (isCatchPokemon(request)) {
 			PokemonHandler.handleCatchPokemon(request, response);
 		} else if (isReleasePokemon(request)) {
@@ -32,17 +36,26 @@ public class PokemonDispatcher implements Dispatcher {
 		}
 	}
 
-	public boolean isViewAllUsersPokemon(HttpServletRequest request) {
+	public boolean isViewUsersPokemon(HttpServletRequest request) {
 		return request.getMethod().equals("GET") && request.getRequestURI().equals("/PokeManiaAPI/api/pokemon")
 				&& request.getParameter("userId") != null;
 	}
 
+	public boolean isViewUsersTeam(HttpServletRequest request) {
+		return request.getMethod().equals("GET") && request.getRequestURI().equals("/PokeManiaAPI/api/pokemonteam")
+				&& request.getParameter("userId") != null;
+	}
+	
+	public boolean isUpdateUsersTeam(HttpServletRequest request) {
+		return request.getMethod().equals("POST") && request.getRequestURI().equals("/PokeManiaAPI/api/pokemonteam")
+				&& request.getParameter("userId") != null;
+	}
+	
 	public boolean isCatchPokemon(HttpServletRequest request) {
 		return request.getMethod().contentEquals("POST") && request.getRequestURI().equals("/PokeManiaAPI/api/pokemon");
 	}
 
 	public boolean isReleasePokemon(HttpServletRequest request) {
-		logger.info("DELETE");
 		return request.getMethod().contentEquals("DELETE")
 				&& request.getRequestURI().equals("/PokeManiaAPI/api/pokemon");
 	}

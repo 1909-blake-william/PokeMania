@@ -32,7 +32,11 @@
 
 > **View User's Team**
 * Method: GET
-* Endpoint: TBD
+* Endpoint: /PokeManiaAPI/api/pokemonteam?userId={Insert User's ID here}
+
+> **Update User's Team**
+* Method: POST
+* Endpoint: /PokeManiaAPI/api/pokemonteam?userId={Insert User's ID here}
 
 > **Catch Pokemon**
 * Method: POST
