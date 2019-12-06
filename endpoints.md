@@ -41,15 +41,15 @@
 
 #### TradeRequestDispatcher
 
-* Create Trade Request
+> Create Trade Request
 * METHOD: POST
-* Endpoint: /PokeManiaAPI/api/traderequest
+* Endpoint: /PokeManiaAPI/api/traderequest  
 
-* Update Trade Request / Whether an OFFER was Accepted or Declined
+> Update Trade Request / Whether an OFFER was Accepted or Declined
 * METHOD: PATCH
-* Endpoint: /PokeManiaAPI/api/traderequest?status=Approved
+* Endpoint: /PokeManiaAPI/api/traderequest?status=Approved  
 
-* Update Trade Request to include an OFFER
+> Update Trade Request to include an OFFER
 * METHOD: PATCH
-* Endpoint /PokeManiaAPI/api/tradeoffer
+* Endpoint /PokeManiaAPI/api/tradeoffer  
 
