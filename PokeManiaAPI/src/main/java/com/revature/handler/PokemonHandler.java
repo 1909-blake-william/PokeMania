@@ -48,7 +48,7 @@ public class PokemonHandler {
 		String userId = request.getParameter("userId");
 		logger.warn("User ID: {}", userId);
 		try {
-			Pokemon[] pokemon = dao.fetchBox(Integer.parseInt(userId));
+			Pokemon[] pokemon = dao.fetchTeam(Integer.parseInt(userId));
 			if (pokemon != null) {
 				try {
 					response.setContentType(Json.CONTENT_TYPE);
