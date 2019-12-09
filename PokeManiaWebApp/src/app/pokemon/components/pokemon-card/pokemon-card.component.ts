@@ -35,7 +35,7 @@ export class PokemonCardComponent implements OnInit {
   }
 
   release(poke) {
-    this.pokemonService.release(JSON.stringify(poke));
+    this.pokemonService.release(this.pokemon, poke.id);
   }
 
 

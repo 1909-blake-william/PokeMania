@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from 'src/app/login/services/user.service';
 import { User } from 'src/app/models/User';
-import { Pokemon } from './services/pokemon.service';
+import { Pokemon } from 'src/app/models/Pokemon';
 import { PokemonService } from 'src/app/pokemon/services/pokemon.service';
 import { Subscription } from 'rxjs';
 
