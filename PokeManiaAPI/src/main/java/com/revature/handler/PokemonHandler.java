@@ -102,6 +102,7 @@ public class PokemonHandler {
 	public static void handleReleasePokemon(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			Pokemon pokemon = (Pokemon) Json.read(request.getInputStream(), Pokemon.class);
+			System.out.println(pokemon.toString());
 			boolean wasSuccessful = dao.releasePoke(pokemon);
 			if (wasSuccessful) {
 				response.setStatus(HttpServletResponse.SC_CREATED);
@@ -114,6 +115,7 @@ public class PokemonHandler {
 			logger.warn("Failed to read the Request Body: {}", e);
 			e.printStackTrace();
 		} catch (SQLException e) {
+			logger.warn("Failed to complete SQL operation: {}", e);
 			e.printStackTrace();
 		}
 	}
