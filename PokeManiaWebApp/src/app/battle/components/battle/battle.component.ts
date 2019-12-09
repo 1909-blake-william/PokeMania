@@ -18,6 +18,8 @@ export class BattleComponent implements OnInit {
   public isDataReady: boolean = false
   public opponentDmg: number = 0
   public trainerDmg: number = 0
+  public showOpponentDmg: boolean
+  public showTrainerDmg: boolean
   private _battleTurns: BattleTurn[]
 
   constructor(private teamFetcher: TeamfetchService, private battleCalc: DoBattleService) { }
@@ -26,22 +28,34 @@ export class BattleComponent implements OnInit {
     this.run()
   }
 
-  public async run() {
+  public run() {
 
     this.teamFetcher.fetchTeam(1).then(team => {
 
       this._team1 = team
-      this.pokemon1 = team[0]
 
       this.teamFetcher.fetchTeam(2).then(team => {
 
         this._team2 = team
-        this.pokemon2 = team[0]
 
         this.getBattleResults().then(turns => {
 
           this._battleTurns = turns
+
+          if(turns[0].attacker.trainerID == 1) {
+
+            this.pokemon1 = turns[0].attacker
+            this.pokemon2 = turns[0].defender
+
+          } else {
+
+            this.pokemon1 = turns[0].defender
+            this.pokemon2 = turns[0].attacker
+
+          }
+
           this.isDataReady = true
+          this.displayResults()
 
         })
 
@@ -72,9 +86,39 @@ export class BattleComponent implements OnInit {
 
   }
 
-  private async displayResults() {
+  private displayResults() {
 
-    
+    let time = 0
+
+    for(let turn of this._battleTurns) {
+
+      setTimeout(() => this.updateScreen(turn.attacker, turn.defender, turn.attacker.trainerID === 1, turn.damage), time += 1000);
+
+    }
+
+  }
+
+  private updateScreen(attacker: Pokemon, defender: Pokemon, trainerDidAttack: boolean, dmg: number) {
+
+    if(trainerDidAttack) {
+
+      if(this.pokemon1 != attacker) this.pokemon1 = attacker
+      if(this.pokemon2 != defender) this.pokemon2 = defender
+
+      this.opponentDmg = dmg
+      this.showOpponentDmg = true
+      setTimeout(() => {this.showOpponentDmg = false}, 500);
+
+    } else {
+
+      if(this.pokemon1 != defender) this.pokemon1 = defender
+      if(this.pokemon2 != attacker) this.pokemon2 = attacker
+
+      this.trainerDmg = dmg
+      this.showTrainerDmg = true
+      setTimeout(() => {this.showTrainerDmg = false}, 500);
+
+    }
 
   }
 
