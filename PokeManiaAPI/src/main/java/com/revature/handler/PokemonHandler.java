@@ -20,14 +20,15 @@ public class PokemonHandler {
 	private static final Logger logger = LogManager.getLogger(PokemonHandler.class);
 
 	public static void handleViewAllUsersPokemon(HttpServletRequest request, HttpServletResponse response) {
-		String[] path = request.getRequestURI().split("/");
-		int userId = Integer.parseInt(path[path.length - 1]);
+		String userId = request.getParameter("userId");
+		logger.warn("User ID: {}", userId);
 		try {
-			Pokemon[] pokemon = dao.fetchBox(userId);
+			Pokemon[] pokemon = dao.fetchBox(Integer.parseInt(userId));
 			if (pokemon != null) {
 				try {
 					response.setContentType(Json.CONTENT_TYPE);
 					response.getOutputStream().write(Json.write(pokemon));
+					return;
 				} catch (IOException e) {
 					logger.warn("Failed to write to Response Body: {}", e);
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -43,6 +44,42 @@ public class PokemonHandler {
 		}
 	}
 
+	public static void handleViewAllUsersTeam(HttpServletRequest request, HttpServletResponse response) {
+		String userId = request.getParameter("userId");
+		logger.warn("User ID: {}", userId);
+		try {
+			Pokemon[] pokemon = dao.fetchTeam(Integer.parseInt(userId));
+			if (pokemon != null) {
+				try {
+					response.setContentType(Json.CONTENT_TYPE);
+					response.getOutputStream().write(Json.write(pokemon));
+					return;
+				} catch (IOException e) {
+					logger.warn("Failed to write to Response Body: {}", e);
+					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					return;
+				}
+			} else {
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				return;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void handleUpdateUsersTeam(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			Pokemon[] pokemon = (Pokemon[]) Json.read(request.getInputStream(), Pokemon.class);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+	}
+	
 	public static void handleCatchPokemon(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			Pokemon pokemon = (Pokemon) Json.read(request.getInputStream(), Pokemon.class);

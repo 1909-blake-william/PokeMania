@@ -1,55 +1,63 @@
 # PokeMania EndPoints
 
-#### AuthDispatcher
+#### **AuthDispatcher**
 
-> LOGIN
+> **LOGIN**
 * Method: POST
 * Endpoint: /PokeManiaAPI/api/login  
 
-> INFO - Get info about current user sesson
+> **INFO - Get info about current user sesson**
 * Method: GET
 * Endpoint: /PokeManiaAPI/api/info  
 
-#### UserDispatcher
+#### **UserDispatcher**
 
-> CREATE USER
+> **CREATE USER**
 * Method: POST
 * Endpoint: /PokeManiaAPI/api/createuser?password={insert password here}  
 
-> ADD FRIEND
+> **ADD FRIEND**
 * Method: POST
 * Endpoint: /PokeManiaAPI/api/addfriend?friendusername={Insert friend username here}  
 
-> GET FRIENDS
+> **GET FRIENDS**
 * Method: GET
 * Endpoint: /PokeManiaAPI/api/getfriends?userid={insert the user ID}  
 
 #### PokemonDispatcher
 
-> View All Pokemon
+> **View All User's Pokemon (BOX)**
 * Method: GET
-* Endpoint: /PokeManiaAPI/api/pokemon  
+* Endpoint: /PokeManiaAPI/api/pokemon?userId={Insert User's ID here}  
 
-> Catch Pokemon
+> **View User's Team**
+* Method: GET
+* Endpoint: /PokeManiaAPI/api/pokemonteam?userId={Insert User's ID here}
+
+> **Update User's Team**
+* Method: POST
+* Endpoint: /PokeManiaAPI/api/pokemonteam?userId={Insert User's ID here}
+
+> **Catch Pokemon**
 * Method: POST
 * Endpoint: /PokeManiaAPI/api/pokemon  
 
-> Release Pokemon
+> **Release Pokemon**
 * Method: DELETE
 * Endpoint: /PokeManiaAPI/api/pokemon  
 
 
 #### TradeRequestDispatcher
 
-> Create Trade Request
+> **Create Trade Request**
 * METHOD: POST
 * Endpoint: /PokeManiaAPI/api/traderequest  
 
-> Update Trade Request / Whether an OFFER was Accepted or Declined
+> **Update Trade Request / Whether an OFFER was Accepted or Declined**
 * METHOD: PATCH
 * Endpoint: /PokeManiaAPI/api/traderequest?status=Approved  
 
-> Update Trade Request to include an OFFER
+> **Update Trade Request to include an OFFER**
 * METHOD: PATCH
 * Endpoint /PokeManiaAPI/api/tradeoffer  
 
