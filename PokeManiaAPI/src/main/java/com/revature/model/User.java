@@ -13,9 +13,16 @@ public class User {
 	private	int		id,
 					badges,
 					wins,
-					losses;
+					losses,
+					counter;
+	private long	cTime;
 	
-	public User(String username, String firstname, String lastname, int id, int badges, int wins, int losses) {
+	public User() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public User(String username, String firstname, String lastname, int id, int badges, int wins, int losses,
+			int counter, long cTime) {
 		super();
 		this.username = username;
 		this.firstname = firstname;
@@ -24,8 +31,9 @@ public class User {
 		this.badges = badges;
 		this.wins = wins;
 		this.losses = losses;
+		this.counter = counter;
+		this.cTime = cTime;
 	}
-	
 	public String getUsername() {
 		return username;
 	}
@@ -68,16 +76,31 @@ public class User {
 	public void setLosses(int losses) {
 		this.losses = losses;
 	}
-	@Override
-	public String toString() {
-		return "User [username=" + username + ", firstname=" + firstname + ", lastname=" + lastname + ", id=" + id
-				+ ", badges=" + badges + ", wins=" + wins + ", losses=" + losses + "]";
+	public int getCounter() {
+		return counter;
+	}
+	public void setCounter(int counter) {
+		this.counter = counter;
+	}
+	public long getcTime() {
+		return cTime;
+	}
+	public void setcTime(long cTime) {
+		this.cTime = cTime;
 	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + badges;
+		result = prime * result + (int) (cTime ^ (cTime >>> 32));
+		result = prime * result + counter;
+		result = prime * result + ((firstname == null) ? 0 : firstname.hashCode());
 		result = prime * result + id;
+		result = prime * result + ((lastname == null) ? 0 : lastname.hashCode());
+		result = prime * result + losses;
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		result = prime * result + wins;
 		return result;
 	}
 	@Override
@@ -89,9 +112,43 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
+		if (badges != other.badges)
+			return false;
+		if (cTime != other.cTime)
+			return false;
+		if (counter != other.counter)
+			return false;
+		if (firstname == null) {
+			if (other.firstname != null)
+				return false;
+		} else if (!firstname.equals(other.firstname))
+			return false;
 		if (id != other.id)
+			return false;
+		if (lastname == null) {
+			if (other.lastname != null)
+				return false;
+		} else if (!lastname.equals(other.lastname))
+			return false;
+		if (losses != other.losses)
+			return false;
+		if (username == null) {
+			if (other.username != null)
+				return false;
+		} else if (!username.equals(other.username))
+			return false;
+		if (wins != other.wins)
 			return false;
 		return true;
 	}
-
+	@Override
+	public String toString() {
+		return "User [username=" + username + ", firstname=" + firstname + ", lastname=" + lastname + ", id=" + id
+				+ ", badges=" + badges + ", wins=" + wins + ", losses=" + losses + ", counter=" + counter + ", cTime="
+				+ cTime + "]";
+	}
+	
+	
+	
+	
 }

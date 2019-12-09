@@ -8,8 +8,10 @@ export class User {
     private _badges: number
     private _wins: number
     private _losses: number
+    private _counter: number
+    private _cTime: number
 
-    constructor(username: string, firstname: string, lastname: string, id: number, badges: number, wins: number, losses: number) {
+    constructor(username: string, firstname: string, lastname: string, id: number, badges: number, wins: number, losses: number, counter: number, cTime: number) {
 
         this._username = username
         this._firstname = firstname
@@ -18,6 +20,8 @@ export class User {
         this._badges = badges
         this._wins = wins
         this._losses = losses
+        this._counter = counter
+        this._cTime = cTime
 
     }
 
@@ -41,5 +45,11 @@ export class User {
 
     get losses(): number { return this._losses }
     set losses(losses: number) { this._losses = losses }
+
+    get counter(): number { return this._counter }
+    set counter(counter: number) { this._counter = counter }
+
+    get cTime(): number { return this._cTime }
+    set cTime(cTime: number) { this._cTime = cTime }
 
 }

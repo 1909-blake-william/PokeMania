@@ -1,0 +1,8 @@
+<div  class="card ">
+    <div class="card-header text-center">
+        <img [src] = "pokemon.frontImg" (click)="releaseToggle()">
+        <h4>{{pokemon.id}}</h4>
+        <button class="btn btn-danger" *ngIf = "releaseToggled" (click)="release(pokemon)">Release</button>
+    </div>
+</div>
+

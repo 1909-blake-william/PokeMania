@@ -1,6 +1,7 @@
 package com.revature.web;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -34,16 +35,13 @@ public class AuthDispatcher implements Dispatcher {
 			// Converting request body (request.getInputStream()
 			// INTO Object of type LoginForm (found in com.revature.model.LoginForm)
 			LoginForm form = (LoginForm) Json.read(request.getInputStream(), LoginForm.class);
-
-			//FIX THIS LOGIN METHOD!
 			User info = userDao.login(form.getUsername(), form.getPassword());
-
 			if (info != null) {
 				response.setContentType(Json.CONTENT_TYPE);
 				Cookie cookie = new Cookie("currentUser", info.getUsername());
 				cookie.setPath("/PokeMania/api");
 				response.addCookie(cookie);
-				
+
 				response.getOutputStream().write(Json.write(info));
 				return;
 			} else {
@@ -51,7 +49,8 @@ public class AuthDispatcher implements Dispatcher {
 				return;
 			}
 
-		} catch (IOException e) {
+		} catch (IOException | SQLException e) {
+			logger.warn("Exception encounterd: {}", e);
 			e.printStackTrace();
 		}
 	}
