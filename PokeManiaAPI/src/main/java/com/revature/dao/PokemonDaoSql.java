@@ -259,8 +259,11 @@ public class PokemonDaoSql implements PokemonDao {
 			//Add each pokemon to a batch for an efficient whole team write
 			for(int poke : pokeTeam) {
 				
+				if (poke == 0) {
+					break;
+				}
 				ps.setInt(1, userID);
-				ps.setInt(2, poke);
+				ps.setInt(2, poke);		
 				ps.addBatch();
 				ps.clearParameters();
 				
