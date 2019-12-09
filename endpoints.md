@@ -24,6 +24,10 @@
 * Method: GET
 * Endpoint: /PokeManiaAPI/api/getfriends?userid={insert the user ID}  
 
+> **UPDATE USER VALUES**
+* Method: PUT
+* Endpoint: /PokeManiaAPI/api/updateuser
+
 #### PokemonDispatcher
 
 > **View All User's Pokemon (BOX)**
@@ -44,7 +48,7 @@
 
 > **Release Pokemon**
 * Method: DELETE
-* Endpoint: /PokeManiaAPI/api/pokemon  
+* Endpoint: /PokeManiaAPI/api/pokemon?pokemonId={pokemon's Id}
 
 
 #### TradeRequestDispatcher
