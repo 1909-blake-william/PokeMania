@@ -101,10 +101,10 @@ public class PokemonHandler {
 
 	public static void handleReleasePokemon(HttpServletRequest request, HttpServletResponse response) {
 		try {
-//			Pokemon pokemon = (Pokemon) Json.read(request.getInputStream(), Pokemon.class);
 			String pId = request.getParameter("pokemonId");
-			logger.info("ID of pokemon to be deleted: {}", pId);
-			boolean wasSuccessful = dao.releasePoke(Integer.parseInt(pId));
+			int num = Integer.parseInt(pId);
+			logger.info("ID of pokemon to be deleted: {}", num);
+			boolean wasSuccessful = dao.releasePoke(num);
 			
 			if (wasSuccessful) {
 				response.setStatus(HttpServletResponse.SC_CREATED);

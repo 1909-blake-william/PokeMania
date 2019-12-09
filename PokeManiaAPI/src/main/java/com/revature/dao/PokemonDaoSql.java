@@ -313,21 +313,19 @@ public class PokemonDaoSql implements PokemonDao {
 	 * @return Whether release was successful
 	 * @exception If there's an issue talking with the database a SQLException is thrown
 	 */
-	public boolean releasePoke(int pokemonID) throws SQLException {
+	public boolean releasePoke(int pokemonID) {
 		
 		PreparedStatement ps;
-		
+				
 		try(Connection c = ConnectionUtil.getConnection()) {
-			
 			ps = c.prepareStatement(RM_POKE);
 			ps.setInt(1, pokemonID);
-			
 			return ps.executeUpdate() == 1;
 			
 		} catch(SQLException e) {
 			
 			log.warn("Error: Failed to release pokemon" + e.getMessage());
-			throw e;
+			return false;
 			
 		}
 		
