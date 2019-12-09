@@ -4,6 +4,8 @@ import { LoginComponent } from './login/components/login/login.component';
 import { LoginModule } from './login/login.module';
 import { RegisterModule } from './register/register.module'
 import { RegisterComponent } from './register/components/register/register.component'
+import { BattleComponent } from './battle/components/battle/battle.component';
+import { BattleModule } from './battle/battle.module';
 
 const routes: Routes = [
   {
@@ -13,6 +15,10 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent
+  },
+  {
+    path: 'battle',
+    component: BattleComponent
   }
 ]
 
@@ -20,7 +26,8 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes),
     LoginModule,
-    RegisterModule
+    RegisterModule,
+    BattleModule
   ],
   exports: [
     RouterModule

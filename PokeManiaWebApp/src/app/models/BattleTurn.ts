@@ -1,10 +1,12 @@
+import { Pokemon } from './Pokemon'
+
 export class BattleTurn {
 
-    private _attacker: number
-    private _defender: number
+    private _attacker: Pokemon
+    private _defender: Pokemon
     private _damage: number
 
-    constructor(attacker: number, defender: number, damage: number) {
+    constructor(attacker: Pokemon, defender: Pokemon, damage: number) {
 
         this._attacker = attacker
         this._defender = defender
@@ -12,8 +14,8 @@ export class BattleTurn {
 
     }
 
-    get attacker(): number { return this._attacker }
-    get defender(): number { return this._defender }
+    get attacker(): Pokemon { return this._attacker }
+    get defender(): Pokemon { return this._defender }
     get damage(): number { return this._damage }
 
 }

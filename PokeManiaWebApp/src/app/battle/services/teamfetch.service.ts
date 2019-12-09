@@ -7,38 +7,14 @@ import { HttpClient } from '@angular/common/http';
 })
 export class TeamfetchService {
 
-  private _team1: Pokemon[]
-  private _team2: Pokemon[]
-
   constructor(private http: HttpClient) { }
 
-  get team1(): Pokemon[] { return this._team1 }
-  get team2(): Pokemon[] { return this._team2 }
-
-  //Sets the team for user 1
-  async fetchTeam1(userID: number): Promise<boolean> {
-
-    this._team1 = await this.fetchTeam(userID)
-
-    return false
-
-  }
-
-  //Sets the team for user 2
-  async fetchTeam2(userID: number): Promise<boolean> {
-
-    this._team2 = await this.fetchTeam(userID)
-
-    return false
-
-  }
-
   //Fetch a team for a user
-  private async fetchTeam(userID: number): Promise<Pokemon[]> {
+  public async fetchTeam(userID: number): Promise<Pokemon[]> {
 
     //Mocked for now
     let team: Pokemon[] = []
-    let pokeID: number = Math.random() * 100 + 1
+    let pokeID: number = Math.floor(Math.random() * 700 + 1)
 
     for(let i = 0; i < 6; i++)
 

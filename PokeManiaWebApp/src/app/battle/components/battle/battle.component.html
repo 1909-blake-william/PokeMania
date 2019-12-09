@@ -1,1 +1,10 @@
-<p>battle works!</p>
+<div *ngIf="isDataReady" id="battle-field">
+    <div class="pokemon" id="trainer">
+        <img class="pokemon-img" src={{pokemon1.backImg}} alt="Trainer pokemon">
+    </div>
+    <h1 id="trainer-dmg">{{trainerDmg}}</h1>
+    <h1>{{opponentDmg}}</h1>
+    <div class="pokemon" id="opponent">
+        <img class="pokemon-img" src={{pokemon2.frontImg}} alt="Opponent pokemon">
+    </div>
+</div>
