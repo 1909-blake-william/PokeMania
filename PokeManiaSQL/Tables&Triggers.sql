@@ -88,5 +88,4 @@ END;
     
 --DELETE FROM trainers;
 
-
     

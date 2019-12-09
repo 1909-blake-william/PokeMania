@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Pokemon } from 'src/app/models/Pokemon';
 import { HttpClient } from '@angular/common/http';
-import { UserService } from 'src/app/login/services/user.service';
-import { User } from 'src/app/models/User';
+import { PokemonService } from 'src/app/pokemon/services/pokemon.service';
+
 
 // component for displaying each pokemon, will be used in team and box
 
@@ -13,27 +13,30 @@ import { User } from 'src/app/models/User';
 })
 export class PokemonCardComponent implements OnInit {
 
-  pokemon: Pokemon[] = [];
+  @Input()
+  pokemon: Pokemon;
+  
 
-  constructor(private httpClient: HttpClient, private userService: UserService) { }
+  releaseToggled = false; // variable to track if release button is visible
 
-  user: User;
-  // somehting weird here, with observables.
-  // = this.userService.getUser();
+  constructor(private pokemonService: PokemonService) { 
+  }
+
+
   ngOnInit() {
-    // user id is hard coded in for now, should use this ${this.user._id} /285
-    this.httpClient.get<Pokemon[]>('http://localhost:8080/PokeManiaAPI/api/pokemon', {
-      withCredentials: true
-    })
-      .subscribe(data => {
-        this.pokemon = data;
-      }, err => {
-        console.log(err);
-      });
-
       // for catching pokemon
       // this.httpClient.get<Pokemon[]>('https://pokeapi.co/api/v2/pokemon/${id}', {
-
   }
+
+  // if pokemon is clicked add/remove button
+  releaseToggle() {
+    this.releaseToggled = !this.releaseToggled;
+  }
+
+  release(poke) {
+    this.pokemonService.release(JSON.stringify(poke));
+  }
+
+
 
 }
