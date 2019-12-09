@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Pokemon } from 'src/app/models/Pokemon';
-import { HttpClient } from '@angular/common/http';
+// import { HttpClient } from '@angular/common/http';
 import { PokemonService } from 'src/app/pokemon/services/pokemon.service';
 
 
@@ -15,18 +15,18 @@ export class PokemonCardComponent implements OnInit {
 
   @Input()
   pokemon: Pokemon;
-  
+
 
   releaseToggled = false; // variable to track if release button is visible
 
-  constructor(private pokemonService: PokemonService) { 
+  constructor(private pokemonService: PokemonService) {
   }
 
 
   ngOnInit() {
       // for catching pokemon
       // this.httpClient.get<Pokemon[]>('https://pokeapi.co/api/v2/pokemon/${id}', {
-      // add stuff on sql table to track if they can catch pokemon  
+      // add stuff on sql table to track if they can catch pokemon
   }
 
   // if pokemon is clicked add/remove button
@@ -35,7 +35,7 @@ export class PokemonCardComponent implements OnInit {
   }
 
   release(poke) {
-    this.pokemonService.release(this.pokemon, poke.id);
+    this.pokemonService.release(poke.id);
   }
 
 

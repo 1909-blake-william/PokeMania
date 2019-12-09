@@ -34,7 +34,7 @@ export class PokemonService {
 
   constructor(private httpClient: HttpClient, private userService: UserService) {
 
-    // user id is hard coded in for now, should use this ${this.user._id}
+    // user id is hard coded in for now, should use this ${this.user.id}
     this.httpClient.get<Pokemon[]>('http://localhost:8080/PokeManiaAPI/api/pokemon?userId=285', {
       withCredentials: true
     })
@@ -58,12 +58,12 @@ export class PokemonService {
 
   }
 
-  // get the current team then add the new pokemon to it then update the stream.
+  // get the current team then add the new pokemon to it then update both streams.
   toTeam(poke, pokeBox) {
 
     // first get the team then add the new pokemon onto the end
     let pokeTeam: Pokemon[];
-    let teamSubscription = this.$team.subscribe(pokes => {
+    const teamSubscription = this.$team.subscribe(pokes => {
       pokeTeam = pokes;
     });
     pokeTeam.push(poke);
@@ -95,11 +95,55 @@ export class PokemonService {
     this.boxStream.next(pokeBox);
   }
 
-  toBox(poke) {
+  // get box, then add pokemon to it (remove from team) then update both streams.
+  toBox(poke, pokeTeam) {
+    // first get the box then add the new pokemon onto the end
+    let pokeBox: Pokemon[];
+    const boxSubscription = this.$box.subscribe(pokes => {
+      pokeBox = pokes;
+    });
+    pokeBox.push(poke);
+    this.boxStream.next(pokeBox); // send data to stream so components will update
+    boxSubscription.unsubscribe(); // subscription no longer need
+
+    // http request to remove poke from team in DB
+    this.httpClient.delete(`http://localhost:8080/PokeManiaAPI/api/pokemonteam?userId=${poke.id}`, {
+      withCredentials: true
+    }).subscribe(
+      data => {
+        console.log('removed from team');
+      },
+      err => {
+        console.log(err);
+      }
+    );
+
+
+
+    // remove pokemon going to box
+    let i = 0;
+    pokeTeam.forEach(element => {
+      if (element === poke) {
+        pokeTeam.splice(i, 1);
+      }
+      i++;
+    });
+    this.teamStream.next(pokeTeam);
 
   }
 
-  release(pokeBox, id) {
+  catchPoke(poke) {
+
+    const dexId: number = Math.ceil(Math.random() * 810); // get random poke 1-810
+    
+  }
+
+  release(id) {
+    let pokeBox: Pokemon[];
+    const boxSubscription = this.$box.subscribe(pokes => {
+      pokeBox = pokes;
+    });
+    boxSubscription.unsubscribe();
     this.httpClient.delete<Pokemon>(`http://localhost:8080/PokeManiaAPI/api/pokemon?pokemonId=${id}`, {
       withCredentials: true,
     })
