@@ -75,8 +75,14 @@ public class PokemonHandler {
 			Team team = (Team) Json.read(request.getInputStream(), Team.class);
 			int userId = team.getUserId();
 			int[] pokeTeam = new int[]{team.getPoke1(),team.getPoke2(), team.getPoke3(), team.getPoke4(), team.getPoke5(), team.getPoke6()};
-			
-		} catch (IOException e) {
+			boolean wasSuccessful = dao.saveTeam(userId, pokeTeam);
+			if (wasSuccessful) {
+				response.setStatus(HttpServletResponse.SC_CREATED);
+				return;
+			} else {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			}
+		} catch (IOException | SQLException e) {
 			e.printStackTrace();
 		}
 	
