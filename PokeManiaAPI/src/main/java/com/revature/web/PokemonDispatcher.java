@@ -57,7 +57,7 @@ public class PokemonDispatcher implements Dispatcher {
 
 	public boolean isReleasePokemon(HttpServletRequest request) {
 		return request.getMethod().contentEquals("DELETE")
-				&& request.getRequestURI().equals("/PokeManiaAPI/api/pokemon");
+				&& request.getRequestURI().equals("/PokeManiaAPI/api/pokemon") && request.getParameter("pokemonId") != null;
 	}
 
 }
