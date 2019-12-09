@@ -313,14 +313,14 @@ public class PokemonDaoSql implements PokemonDao {
 	 * @return Whether release was successful
 	 * @exception If there's an issue talking with the database a SQLException is thrown
 	 */
-	public boolean releasePoke(Pokemon pokemon) throws SQLException {
+	public boolean releasePoke(int pokemonID) throws SQLException {
 		
 		PreparedStatement ps;
 		
 		try(Connection c = ConnectionUtil.getConnection()) {
 			
 			ps = c.prepareStatement(RM_POKE);
-			ps.setInt(1, pokemon.getId());
+			ps.setInt(1, pokemonID);
 			
 			return ps.executeUpdate() == 1;
 			
