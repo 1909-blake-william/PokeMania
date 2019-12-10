@@ -228,20 +228,24 @@ export class PokemonService {
     // this.user.counter++;
     // this.user.cTime = Date.now();
 
+    let pokeBox: Pokemon[];
+        const boxSubscription = this.$box.subscribe(pokes => {
+        pokeBox = pokes;
+        });
+        console.log(pokeBox);
+
     this.httpClient.post(`http://localhost:8080/PokeManiaAPI/api/pokemon`, poke, {
       withCredentials: true
     }).subscribe(
       data => {
         console.log('counter incremented and pokemon caught');
         // this.userService.setUser(this.user);
-        let pokeBox: Pokemon[];
-        const boxSubscription = this.$box.subscribe(pokes => {
-          pokeBox = pokes;
-        });
+        console.log(data);
         poke.id = data;
         pokeBox.push(poke);
         this.boxStream.next(pokeBox); // send data to stream so components will update
         boxSubscription.unsubscribe(); // subscription no longer need
+        
       },
       err => {
         console.log(err);

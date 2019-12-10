@@ -93,7 +93,7 @@ public class PokemonHandler {
 			Pokemon pokemon = (Pokemon) Json.read(request.getInputStream(), Pokemon.class);
 			int successCode = dao.savePokemon(pokemon);
 			if (successCode > 0) {
-				response.getWriter().write(successCode);
+				response.getWriter().write(Integer.toString(successCode));
 				response.setStatus(HttpServletResponse.SC_CREATED);
 				return;
 			} else {
