@@ -36,8 +36,8 @@ export class PokemonService {
 
   constructor(private httpClient: HttpClient, private userService: UserService) {
 
-    // user id is hard coded in for now, should use this ${this.user.id}
-    this.httpClient.get<Pokemon[]>('http://localhost:8080/PokeManiaAPI/api/pokemon?userId=285', {
+    // user id is hard coded in for now, should use this
+    this.httpClient.get<Pokemon[]>(`http://localhost:8080/PokeManiaAPI/api/pokemon?userId=${this.user.id}`, {
       withCredentials: true
     })
       .subscribe(data => {
@@ -47,7 +47,7 @@ export class PokemonService {
       });
 
 
-    this.httpClient.get<Pokemon[]>('http://localhost:8080/PokeManiaAPI/api/pokemonteam?userId=285', {
+    this.httpClient.get<Pokemon[]>(`http://localhost:8080/PokeManiaAPI/api/pokemonteam?userId=${this.user.id}`, {
       withCredentials: true
     })
       .subscribe(data => {
@@ -87,10 +87,9 @@ export class PokemonService {
       }
     }
 
-    teamObject = new Team(285, nums[0], nums[1], nums[2], nums[3], nums[4], nums[5]);
-
+    teamObject = new Team(this.user.id, nums[0], nums[1], nums[2], nums[3], nums[4], nums[5]);
     // http request to add to team in DB
-    this.httpClient.post(`http://localhost:8080/PokeManiaAPI/api/pokemonteam?userId=${285}`, teamObject, {
+    this.httpClient.post(`http://localhost:8080/PokeManiaAPI/api/pokemonteam?userId=${this.user.id}`, teamObject, {
       withCredentials: true
     }).subscribe(
       data => {
@@ -150,7 +149,7 @@ export class PokemonService {
       }
     }
 
-    teamObject = new Team(285, nums[0], nums[1], nums[2], nums[3], nums[4], nums[5]);
+    teamObject = new Team(this.user.id, nums[0], nums[1], nums[2], nums[3], nums[4], nums[5]);
 
     // http request to remove poke from team in DB
     this.httpClient.post(`http://localhost:8080/PokeManiaAPI/api/pokemonteam?userId=${285}`, teamObject, {
@@ -169,21 +168,21 @@ export class PokemonService {
   async findPoke(): Promise<Pokemon> {
 
     const dexId: number = Math.ceil(Math.random() * 810); // get random poke 1-810
-    // this.user.counter++;
-    // let poke: Pokemon;
-    // this.user.cTime = Date.now();
+    this.user.counter = this.user.counter + 1;
+    let poke: Pokemon;
+    this.user.cTime = Date.now();
 
-    // this.httpClient.post(`http://localhost:8080/PokeManiaAPI/api/pokemonteam?userId=${285}`, this.user, {
-    //   withCredentials: true
-    // }).subscribe(
-    //   data => {
-    //     console.log('counter incremented');
-    //     this.userService.setUser(this.user);
-    //   },
-    //   err => {
-    //     console.log(err);
-    //   }
-    // );
+    this.httpClient.put(`http://localhost:8080/PokeManiaAPI/api/updatecounter`, this.user, {
+      withCredentials: true
+    }).subscribe(
+      data => {
+        console.log('counter incremented');
+        this.userService.setUser(this.user);
+      },
+      err => {
+        console.log(err);
+      }
+    );
 
     // get pokemon from api
     // this.httpClient.get<Pokemon>(`https://pokeapi.co/api/v2/pokemon/${dexId}`, {
@@ -217,7 +216,7 @@ export class PokemonService {
       type1 = type1.charAt(0).toUpperCase() + type1.substring(1);
       type2 = type2.charAt(0).toUpperCase() + type2.substring(1);
     }
-    pokemon = new Pokemon(dexId, 285, response.id, 1, response.stats[5].base_stat, response.stats[4].base_stat,
+    pokemon = new Pokemon(dexId, this.user.id, response.id, 1, response.stats[5].base_stat, response.stats[4].base_stat,
       response.stats[3].base_stat, response.stats[0].base_stat, type1, type2,
       response.sprites['front_default'], response.sprites['back_default']);
     return pokemon;
@@ -225,24 +224,24 @@ export class PokemonService {
   }
 
   catchPoke(poke) {
-    // this.user.counter++;
-    // this.user.cTime = Date.now();
+    this.user.counter = this.user.counter + 1;
+    this.user.cTime = Date.now();
     if (!poke.backImg) {
       poke.backImg = ' ';
     }
 
     let pokeBox: Pokemon[];
     const boxSubscription = this.$box.subscribe(pokes => {
-        pokeBox = pokes;
-        });
+      pokeBox = pokes;
+    });
 
     this.httpClient.post(`http://localhost:8080/PokeManiaAPI/api/pokemon`, poke, {
       withCredentials: true
     }).subscribe(
       data => {
-        console.log('counter incremented and pokemon caught');
-        // this.userService.setUser(this.user);
-        console.log(data);
+        console.log('pokemon caught');
+        this.userService.setUser(this.user);
+        // console.log(data);
         poke.id = data;
         pokeBox.push(poke);
         this.boxStream.next(pokeBox); // send data to stream so components will update
@@ -252,11 +251,24 @@ export class PokemonService {
         console.log(err);
       }
     );
+
+    this.httpClient.put(`http://localhost:8080/PokeManiaAPI/api/updatecounter`, this.user, {
+      withCredentials: true
+    }).subscribe(
+      data => {
+        console.log('counter incremented');
+        this.userService.setUser(this.user);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+
   }
 
   resetCounter(id) {
     this.user.counter = 0;
-    this.httpClient.post(`http://localhost:8080/PokeManiaAPI/api/pokemonteam?userId=${285}`, this.user, {
+    this.httpClient.put(`http://localhost:8080/PokeManiaAPI/api/updatecounter`, this.user, {
       withCredentials: true
     }).subscribe(
       data => {

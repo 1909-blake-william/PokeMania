@@ -74,7 +74,7 @@ public class UserDaoSql implements UserDao {
 			if (rs.next())
 
 				user = new User(rs.getString(2), rs.getString(4), rs.getString(5), rs.getInt(1), rs.getInt(6),
-						rs.getInt(7), rs.getInt(8), rs.getInt(9), rs.getInt(10));
+						rs.getInt(7), rs.getInt(8), rs.getInt(9), rs.getLong(10));
 
 		} catch (SQLException e) {
 
