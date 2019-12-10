@@ -6,9 +6,10 @@ import { RegisterModule } from './register/register.module';
 import { RegisterComponent } from './register/components/register/register.component';
 import { BattleComponent } from './battle/components/battle/battle.component';
 import { BattleModule } from './battle/battle.module';
-import { PokemonComponentComponent } from './pokemon/components/pokemon-component/pokemon-component.component';
 import { PokemonModule } from './pokemon/pokemon.module';
-
+import { PokemonComponentComponent } from './pokemon/components/pokemon-component/pokemon-component.component';
+import { FriendsComponent } from './friends/components/friends/friends.component';
+import { FriendsModule } from './friends/friends.module';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 
@@ -30,6 +31,10 @@ const routes: Routes = [
     component: PokemonComponentComponent
   },
   {
+    path: 'friends',
+    component: FriendsComponent
+  },
+  {
     path: '**',
     component: PageNotFoundComponent
   }
@@ -41,7 +46,8 @@ const routes: Routes = [
     LoginModule,
     RegisterModule,
     BattleModule,
-    PokemonModule
+    PokemonModule,
+    FriendsModule
   ],
   exports: [
     RouterModule
