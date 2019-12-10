@@ -37,7 +37,7 @@ export class RegisterComponent implements OnInit {
 
     if(!this.verify()) return
 
-    user = new User(this.username, this.firstname, this.lastname, 0, 0, 0, 0)
+    user = new User(this.username, this.firstname, this.lastname, 0, 0, 0, 0, 0, 0)
     pokemon = await this.getPokemon()
 
     //send new user data to API

@@ -190,6 +190,7 @@ export class PokemonService {
   catchPoke(poke) {
     // this.user.counter++;
     // this.user.cTime = Date.now();
+    console.log(poke);
 
     this.httpClient.post(`http://localhost:8080/PokeManiaAPI/api/pokemon`, poke, {
       withCredentials: true
