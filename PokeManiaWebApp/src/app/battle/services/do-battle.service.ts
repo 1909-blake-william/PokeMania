@@ -66,8 +66,6 @@ export class DoBattleService {
 
         }
 
-        console.log(`Pokemon1: ${pokemon1.hp}, Pokemon2: ${pokemon2.hp}`)
-
       }
 
       if(pokemon1.hp <= 0) pokemon1 = null
