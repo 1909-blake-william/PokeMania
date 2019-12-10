@@ -1,7 +1,7 @@
 <div id="nav-bar">
-    <div class="nav-item" routerLink="">Login</div>
-    <app-logout></app-logout>
-    <div class="nav-item" routerLink="/poke">Pokemon</div>
-    <div class="nav-item" routerLink="/battle">Battle</div>
-    <div class="nav-item" routerLink="/friends">Friends</div>
+    <div *ngIf="user == null" class="nav-item" routerLink="">Login</div>
+    <app-logout *ngIf="user != null"></app-logout>
+    <div *ngIf="user != null" class="nav-item" routerLink="/poke">Pokemon</div>
+    <div *ngIf="user != null" class="nav-item" routerLink="/battle">Battle</div>
+    <div *ngIf="user != null" class="nav-item" routerLink="/friends">Friends</div>
 </div>

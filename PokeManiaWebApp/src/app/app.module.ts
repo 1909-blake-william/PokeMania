@@ -10,6 +10,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { LogoutComponent } from './components/logout/logout.component'
+import { UserService } from './login/services/user.service';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,7 @@ import { LogoutComponent } from './components/logout/logout.component'
     NgbModule
 
   ],
-  providers: [],
+  providers: [UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
