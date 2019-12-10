@@ -258,12 +258,8 @@ public class UserDaoSql implements UserDao {
 	public User[] getFriends(int userID) throws SQLException {
 
 		LinkedList<Integer> friendIDs = getFriendIDs(userID);
-<<<<<<< HEAD
-		List<String> friendNames = null;
-=======
 		List<User> friends = null;
 
->>>>>>> bf1c5c1f6ff261cae854d52c07916e00972d0164
 		if (friendIDs.size() == 0) // No friends
 
 			return null;
