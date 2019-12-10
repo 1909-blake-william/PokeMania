@@ -25,17 +25,21 @@ public class AuthDispatcher implements Dispatcher {
 
 	@Override
 	public boolean supports(HttpServletRequest request) {
-		return isForLogin(request) || isForUserInfo(request);
+		return isForLogin(request) || isForUserInfo(request) || isForUserLogout(request);
 	}
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 		try {
-
-			// Converting request body (request.getInputStream()
-			// INTO Object of type LoginForm (found in com.revature.model.LoginForm)
 			LoginForm form = (LoginForm) Json.read(request.getInputStream(), LoginForm.class);
 			User info = userDao.login(form.getUsername(), form.getPassword());
+			if (request.getMethod().equals("PUT")) {
+				Cookie cookie = new Cookie("currentUser","");
+				cookie.setMaxAge(0);
+				response.addCookie(cookie);
+				response.setStatus(HttpServletResponse.SC_OK);
+				return;
+			}
 			if (info != null) {
 				response.setContentType(Json.CONTENT_TYPE);
 				Cookie cookie = new Cookie("currentUser", info.getUsername());
@@ -44,6 +48,7 @@ public class AuthDispatcher implements Dispatcher {
 
 				response.getOutputStream().write(Json.write(info));
 				return;
+
 			} else {
 				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 				return;
@@ -61,5 +66,9 @@ public class AuthDispatcher implements Dispatcher {
 
 	private boolean isForUserInfo(HttpServletRequest request) {
 		return request.getMethod().equals("GET") && request.getRequestURI().equals("/PokeManiaAPI/api/info");
+	}
+
+	private boolean isForUserLogout(HttpServletRequest request) {
+		return request.getMethod().equals("PUT") && request.getRequestURI().equals("/PokeManiaAPI/api/logout");
 	}
 }
