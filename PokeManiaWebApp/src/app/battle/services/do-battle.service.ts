@@ -41,7 +41,7 @@ export class DoBattleService {
       mod2 = this.typeAdvCalc.modifierCalc(pokemon2, pokemon1)
 
       //Who goes first?
-      let p1GoesFirst = pokemon1.speed >= pokemon2.speed
+      let p1GoesFirst = pokemon1.spd >= pokemon2.spd
 
       //While both fighting pokemon haven't fainted
       while(pokemon1.hp > 0 && pokemon2.hp > 0) {
