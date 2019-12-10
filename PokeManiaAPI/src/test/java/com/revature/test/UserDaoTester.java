@@ -32,11 +32,11 @@ public class UserDaoTester {
 	@BeforeClass
 	public static void addTestUser() throws SQLException {
 		
-			u2 = new User(TEST_USRNM2, "Bob", "Man", -2, 0, 0, 0);
+			u2 = new User(TEST_USRNM2, "Bob", "Man", -2, 0, 0, 0, 0, 0);
 		
 			dao.add_TEST_newUser(u2, TEST_PSWD);
-			dao.addNewUser(new User(TEST_USRNM3, "Bob", "Man", 0, 0, 0, 0), TEST_PSWD);
-			dao.addNewUser(new User(TEST_USRNM4, "Bob", "Man", 0, 0, 0, 0), TEST_PSWD);
+			dao.addNewUser(new User(TEST_USRNM3, "Bob", "Man", 0, 0, 0, 0, 0, 0), TEST_PSWD);
+			dao.addNewUser(new User(TEST_USRNM4, "Bob", "Man", 0, 0, 0, 0, 0, 0), TEST_PSWD);
 		
 	}
 	
@@ -45,7 +45,7 @@ public class UserDaoTester {
 		
 		try {
 			
-			assertTrue(dao.addNewUser(new User(TEST_USRNM, "Bob", "Man", 0, 0, 0, 0), TEST_PSWD));
+			assertTrue(dao.addNewUser(new User(TEST_USRNM, "Bob", "Man", 0, 0, 0, 0, 0, 0), TEST_PSWD));
 			
 		} catch(SQLException e) {
 			
