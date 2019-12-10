@@ -16,7 +16,7 @@ export class TeamfetchService {
 
     try {
 
-      response = await this.http.get(`http://localhost:8080/pokemonteam?userId=${userID}`, {withCredentials: true}).toPromise()
+      response = await this.http.get(`http://localhost:8080/PokeManiaAPI/api/pokemonteam?userId=${userID}`, {withCredentials: true}).toPromise()
 
     } catch(err) {
 

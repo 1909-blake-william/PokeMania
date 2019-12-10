@@ -28,6 +28,7 @@ export class BattleComponent implements OnInit {
   private _battleTurns: BattleTurn[]
   private userSub = this.userService.$user.subscribe(user => this.user = user)
   private user: User
+  private oppID: number = -2
 
   constructor(private teamFetcher: TeamfetchService, private battleCalc: DoBattleService, private userService: UserService, private router: Router) { }
 
@@ -50,7 +51,7 @@ export class BattleComponent implements OnInit {
 
       console.log(team)
 
-      this.teamFetcher.genNPCTeam(2).then(team => {
+      this.teamFetcher.genNPCTeam(this.oppID).then(team => {
 
         this._team2 = team
 
@@ -58,7 +59,7 @@ export class BattleComponent implements OnInit {
 
           this._battleTurns = turns
 
-          if(turns[0].attacker.trainerId == 1) {
+          if(turns[0].attacker.trainerId == this.user.id) {
 
             this.pokemon1 = turns[0].attacker
             this.pokemon2 = turns[0].defender
@@ -109,7 +110,7 @@ export class BattleComponent implements OnInit {
 
     for(let turn of this._battleTurns) {
 
-      setTimeout(() => this.updateScreen(turn.attacker, turn.defender, turn.attacker.trainerId === 1, turn.damage), time += 1000);
+      setTimeout(() => this.updateScreen(turn.attacker, turn.defender, turn.attacker.trainerId === this.user.id, turn.damage), time += 1000);
 
     }
 
