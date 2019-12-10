@@ -12,6 +12,25 @@ export class TeamfetchService {
   //Fetch a team for a user
   public async fetchTeam(userID: number): Promise<Pokemon[]> {
 
+    let response: any
+
+    try {
+
+      response = await this.http.get(`http://localhost:8080/pokemonteam?userId=${userID}`, {withCredentials: true}).toPromise()
+
+    } catch(err) {
+
+      console.error(err)
+
+    }
+
+    return <Pokemon[]> response
+
+  }
+
+  //Fetch a team for a user
+  public async genNPCTeam(userID: number): Promise<Pokemon[]> {
+
     //Mocked for now
     let team: Pokemon[] = []
     let pokeID: number = Math.floor(Math.random() * 700 + 1)

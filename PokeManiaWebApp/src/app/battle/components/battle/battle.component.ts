@@ -44,11 +44,13 @@ export class BattleComponent implements OnInit {
 
     }
 
-    this.teamFetcher.fetchTeam(1).then(team => {
+    this.teamFetcher.fetchTeam(this.user.id).then(team => {
 
       this._team1 = team
 
-      this.teamFetcher.fetchTeam(2).then(team => {
+      console.log(team)
+
+      this.teamFetcher.genNPCTeam(2).then(team => {
 
         this._team2 = team
 
