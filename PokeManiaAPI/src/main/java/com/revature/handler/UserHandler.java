@@ -23,8 +23,10 @@ public class UserHandler {
 		try {
 			User user = (User) Json.read(request.getInputStream(), User.class);
 			String password = request.getParameter("password");
-			boolean wasSuccessful = dao.addNewUser(user, password);
-			if(wasSuccessful) {
+//			boolean wasSuccessful = dao.addNewUser(user, password);
+			int successCode = dao.addNewUser(user, password);
+			if(successCode > 0) {
+				response.getWriter().write(successCode);
 				response.setStatus(HttpServletResponse.SC_CREATED);
 				logger.info("Successfully Added New User");
 				return;
