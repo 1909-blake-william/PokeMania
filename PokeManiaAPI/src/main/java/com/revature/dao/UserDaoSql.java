@@ -224,9 +224,8 @@ public class UserDaoSql implements UserDao {
 			if (rs.next())
 
 				if (password.equals(Password.transformPasswd(rs.getString(1), username)))
-					;
 
-			user = this.fetchUser(username);
+					user = this.fetchUser(username);
 
 		} catch (SQLException e) {
 

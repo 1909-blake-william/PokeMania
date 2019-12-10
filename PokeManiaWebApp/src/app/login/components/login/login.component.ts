@@ -55,6 +55,8 @@ export class LoginComponent implements OnInit {
       console.error(err)
 
     }
+
+    console.log(response)
     
     return <User> response
 

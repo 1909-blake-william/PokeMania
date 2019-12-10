@@ -1,4 +1,4 @@
-<div class="tooltip">
+<div class="not-boostrap-tooltip">
     <form>
         <div class="input" (mouseenter)="showUsernameError()" (mouseleave)="clearError()">
             <label for="username">Username<span class="red">*</span></label>
@@ -49,5 +49,5 @@
         </div>
         <button (click)="submit()" type="button">Register</button>
     </form>
-    <span [style.visibility]="showError ? 'visible' : 'hidden'" class="tooltiptext">{{errorMsg}}</span>
+    <span [style.visibility]="showError ? 'visible' : 'hidden'" class="not-bootstrap-tooltiptext">{{errorMsg}}</span>
 </div>
