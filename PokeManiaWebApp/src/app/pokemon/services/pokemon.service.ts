@@ -28,7 +28,7 @@ export class PokemonService {
   $team = this.teamStream.asObservable();
 
   user: User;
-  userSubscription = this.userService.getUser().subscribe(element => {
+  userSubscription = this.userService.$user.subscribe(element => {
     this.user = element;
   });
 
@@ -36,8 +36,8 @@ export class PokemonService {
 
   constructor(private httpClient: HttpClient, private userService: UserService) {
 
-    // user id is hard coded in for now, should use this ${this.user.id}
-    this.httpClient.get<Pokemon[]>('http://localhost:8080/PokeManiaAPI/api/pokemon?userId=285', {
+    // user id is hard coded in for now, should use this 
+    this.httpClient.get<Pokemon[]>(`http://localhost:8080/PokeManiaAPI/api/pokemon?userId=${this.user.id}`, {
       withCredentials: true
     })
       .subscribe(data => {
@@ -47,7 +47,7 @@ export class PokemonService {
       });
 
 
-    this.httpClient.get<Pokemon[]>('http://localhost:8080/PokeManiaAPI/api/pokemonteam?userId=285', {
+    this.httpClient.get<Pokemon[]>(`http://localhost:8080/PokeManiaAPI/api/pokemonteam?userId=${this.user.id}`, {
       withCredentials: true
     })
       .subscribe(data => {
@@ -90,7 +90,7 @@ export class PokemonService {
     teamObject = new Team(285, nums[0], nums[1], nums[2], nums[3], nums[4], nums[5]);
 
     // http request to add to team in DB
-    this.httpClient.post(`http://localhost:8080/PokeManiaAPI/api/pokemonteam?userId=${285}`, teamObject, {
+    this.httpClient.post(`http://localhost:8080/PokeManiaAPI/api/pokemonteam?userId=${this.user.id}`, teamObject, {
       withCredentials: true
     }).subscribe(
       data => {

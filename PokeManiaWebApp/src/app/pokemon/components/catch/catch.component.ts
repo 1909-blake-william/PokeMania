@@ -14,7 +14,7 @@ export class CatchComponent implements OnInit {
   constructor(private pokemonService: PokemonService, private userService: UserService) { }
   pokemon: Pokemon;
   user: User;
-  userSubscription = this.userService.getUser().subscribe(element => {
+  userSubscription = this.userService.$user.subscribe(element => {
     this.user = element;
   });
 
