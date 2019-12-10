@@ -261,7 +261,6 @@ public class UserDaoSql implements UserDao {
 
 		LinkedList<Integer> friendIDs = getFriendIDs(userID);
 		List<String> friendNames = null;
-
 		if (friendIDs.size() == 0) // No friends
 
 			return null;

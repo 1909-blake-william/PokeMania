@@ -8,6 +8,7 @@ import { PokemonModule } from './pokemon/pokemon.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { FriendsModule } from './friends/friends.module';
 
 @NgModule({
   declarations: [
@@ -19,8 +20,8 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
     BrowserModule,
     AppRoutingModule,
     PokemonModule,
-    NgbModule
-
+    NgbModule,
+    FriendsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

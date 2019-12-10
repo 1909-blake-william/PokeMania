@@ -1,0 +1,50 @@
+<br>
+<div class="container">
+        <div id="friendstitle" class="row">
+            <div class="col-6">Friends List</div>
+            <div class="col-3">New Friends</div>
+            <div class="col-3">Find Friends</div>
+        </div>
+    
+        <div id="friendsbody" class="row">
+                <div id="" class="col-6"><br>
+                   
+                    
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search Friends List" aria-label="Search">
+                    <br>
+                   
+                   <div *ngFor(let friend of friends) >
+                    <button style="padding: 20px; width: 300px" class="btn btn-outline-primary" (click)="open('autofocus')">
+                            <div>{{friend.firstname}} {{friend.lastname}} / <small>{{user.username}}</small></div>
+                            <div class="text-dark" aria-hidden="true"><small>Wins: {{friend.wins}}</small></div>
+                            <div class="text-dark" aria-hidden="true"><small>Losses: {{friend.losses}}</small></div>
+                        </button>
+                        <br><br>
+                    </div>
+    
+                                
+                </div>
+                <div id="" class="col-3"><br>
+                            
+                    <button style="padding: 20px; width: 225px" class="btn btn-outline-primary" (click)="open('autofocus')">
+                        <div>Name of user / <small>username</small></div>
+                        <div class="text-dark" aria-hidden="true"><small>Wins:</small></div>
+                        <div class="text-dark" aria-hidden="true"><small>Losses:</small></div>
+                    </button>
+                    <br><br>
+                                
+                </div>
+                <div id="" class="col-3"><br>
+                    <input class="form-control mr-sm-2" style="padding: 20px;" type="search" placeholder="Search by username" aria-label="Search">
+                    <br>
+                    <button style="padding: 20px; width: 225px" class="btn btn-outline-primary" (click)="open('autofocus')">
+                        <div>Name of user / <small>username</small></div>
+                        <div class="text-dark" aria-hidden="true"><small>Wins:</small></div>
+                        <div class="text-dark" aria-hidden="true"><small>Losses:</small></div>
+                    </button>
+                    <br><br>
+    
+                </div>
+            </div>
+    </div>
+r    

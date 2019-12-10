@@ -42,7 +42,7 @@ export class BattleComponent implements OnInit {
 
           this._battleTurns = turns
 
-          if(turns[0].attacker.trainerID == 1) {
+          if(turns[0].attacker.trainerId == 1) {
 
             this.pokemon1 = turns[0].attacker
             this.pokemon2 = turns[0].defender
@@ -92,7 +92,7 @@ export class BattleComponent implements OnInit {
 
     for(let turn of this._battleTurns) {
 
-      setTimeout(() => this.updateScreen(turn.attacker, turn.defender, turn.attacker.trainerID === 1, turn.damage), time += 1000);
+      setTimeout(() => this.updateScreen(turn.attacker, turn.defender, turn.attacker.trainerId === 1, turn.damage), time += 1000);
 
     }
 

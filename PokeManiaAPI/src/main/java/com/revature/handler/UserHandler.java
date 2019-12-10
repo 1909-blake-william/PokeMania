@@ -69,7 +69,9 @@ public class UserHandler {
 		logger.info("Your user ID is: {}", userId);
 		try {
 			String[] friends = dao.getFriends(userId);
+			System.out.println(friends[0].toString());
 			if(friends.length == 0) {
+				logger.info("No. of friends: " + friends.length);
 				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 			} else {
 				response.setContentType(Json.CONTENT_TYPE);

@@ -32,7 +32,7 @@ const routes: Routes = [
   },
   {
     path: 'friends',
-    component: PageNotFoundComponent
+    component: FriendsComponent
   },
   {
     path: '**',
@@ -46,7 +46,8 @@ const routes: Routes = [
     LoginModule,
     RegisterModule,
     BattleModule,
-    PokemonModule
+    PokemonModule,
+    FriendsModule
   ],
   exports: [
     RouterModule
