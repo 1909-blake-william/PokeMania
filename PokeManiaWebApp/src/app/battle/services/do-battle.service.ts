@@ -82,7 +82,7 @@ export class DoBattleService {
     const MOVE_POWER = 60
 
     //The real formula from the games
-    return Math.floor(((((2 * atkr.level) / 5 + 2) * MOVE_POWER * (atkr.att / dfndr.def)) / 50 + 2) * typeAdv)
+    return Math.floor(((((2 * atkr.level) / 5 + 2) * MOVE_POWER * (atkr.att / dfndr.def)) / 50 + 10) * typeAdv)
 
   }
 
