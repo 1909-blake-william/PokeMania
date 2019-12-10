@@ -2,6 +2,12 @@ package com.revature.model;
 
 import com.revature.TradeStatus;
 
+/**
+ * A model that represents a trade happening between two trainers holding their ids and
+ * the ids of the pokemon offered as well as the current status of the trade and its id
+ * 
+ * @author Kristoffer Spencer
+ */
 public class Trade {
 
 	///id, t_id1, p_id1, t_id2, p_id2, status

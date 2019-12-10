@@ -4,6 +4,12 @@ import java.sql.SQLException;
 
 import com.revature.model.Pokemon;
 
+/**
+ * An interface that defines how the pokemon dao will work and what its jobs are
+ * and how to use this dao
+ * 
+ * @author Kristoffer Spencer
+ */
 public interface PokemonDao {
 
 	PokemonDao	currentImplimentation	= PokemonDaoSql.getInstance();

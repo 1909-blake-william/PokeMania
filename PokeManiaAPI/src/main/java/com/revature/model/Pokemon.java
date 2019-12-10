@@ -1,15 +1,29 @@
 package com.revature.model;
 
+/**
+ * A model that holds all the relevant data of a pokemon for PokeMania
+ * 
+ * @author Kristoffer Spencer
+ */
 public class Pokemon {
-
-	private int id, trainerId, dexNum, level, hp, att, def, spd;
-	private String type1, type2, frontImg, backImg;
-
+	
+	private int		id,
+					trainerID,
+					dexNum,
+					level,
+					hp,
+					att,
+					def,
+					spd;
+	private String	type1,
+					type2,
+					frontImg,
+					backImg;
 	public Pokemon(int id, int trainerId, int dexNum, int level, int hp, int att, int def, int spd, String type1,
 			String type2, String frontImg, String backImg) {
 		super();
 		this.id = id;
-		this.trainerId = trainerId;
+		this.trainerID = trainerId;
 		this.dexNum = dexNum;
 		this.level = level;
 		this.hp = hp;
@@ -35,11 +49,11 @@ public class Pokemon {
 	}
 
 	public int getTrainerId() {
-		return trainerId;
+		return trainerID;
 	}
 
 	public void setTrainerId(int trainerId) {
-		this.trainerId = trainerId;
+		this.trainerID = trainerId;
 	}
 
 	public int getDexNum() {
@@ -146,7 +160,7 @@ public class Pokemon {
 
 	@Override
 	public String toString() {
-		return "Pokemon [id=" + id + ", trainerId=" + trainerId + ", dexNum=" + dexNum + ", level=" + level + ", hp="
+		return "Pokemon [id=" + id + ", trainerId=" + trainerID + ", dexNum=" + dexNum + ", level=" + level + ", hp="
 				+ hp + ", att=" + att + ", def=" + def + ", spd=" + spd + ", type1=" + type1 + ", type2=" + type2
 				+ ", frontImg=" + frontImg + ", backImg=" + backImg + "]";
 	}
