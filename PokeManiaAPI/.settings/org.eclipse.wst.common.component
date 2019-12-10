@@ -11,12 +11,9 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
                 
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-sources/annotations"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/target\generated-sources\annotations"/>
-<<<<<<< HEAD
-=======
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/target\generated-test-sources\test-annotations"/>
                 
->>>>>>> 88b6dd06c3027ed50dae60fb75c44360f402fcde
+
         <property name="context-root" value="PokeManiaAPI"/>
                 
         <property name="java-output-path" value="/PokeManiaAPI/target/classes"/>

@@ -1,1 +1,13 @@
-<p>catch works!</p>
+<div>
+    You can find and catch pokemon everyday. Each Pokemon you find adds one to your counter.
+    Each Pokemon you catch adds one to the counter. Counter resets after a day.
+</div>
+<button *ngIf="true" (click)="findPoke()">
+    Find a sweet new 'mon
+</button> <!-- this.user.counter < 20 -->
+
+<img *ngIf = "this.pokemon" [src] = "pokemon.frontImg">
+
+<button *ngIf="this.pokemon" (click)="catchPoke(this.pokemon)">
+    Gotta catch'em all (but just this one for now)
+</button> <!--  this.user.counter < 20 &&  -->
