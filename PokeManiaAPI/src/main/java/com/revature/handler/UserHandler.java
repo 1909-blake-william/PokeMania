@@ -25,7 +25,7 @@ public class UserHandler {
 			String password = request.getParameter("password");
 			int successCode = dao.addNewUser(user, password);
 			if(successCode > 0) {
-				response.getWriter().write(successCode);
+				response.getWriter().write(Integer.toString(successCode));
 				response.setStatus(HttpServletResponse.SC_CREATED);
 				logger.info("Successfully Added New User");
 				return;
