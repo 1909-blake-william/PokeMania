@@ -11,7 +11,7 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path:'poke',
+    path: 'poke',
     component: PokemonComponentComponent
   }
 ];

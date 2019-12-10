@@ -24,9 +24,6 @@ export class PokemonCardComponent implements OnInit {
 
 
   ngOnInit() {
-      // for catching pokemon
-      // this.httpClient.get<Pokemon[]>('https://pokeapi.co/api/v2/pokemon/${id}', {
-      // add stuff on sql table to track if they can catch pokemon
   }
 
   // if pokemon is clicked add/remove button

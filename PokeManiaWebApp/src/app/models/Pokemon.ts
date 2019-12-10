@@ -52,8 +52,8 @@ export class Pokemon {
     get def(): number { return this._def }
     set def(def: number) { this._def = def }
 
-    get speed(): number { return this.speed }
-    set speed(spd: number) { this._spd = spd }
+    get spd(): number { return this.spd }
+    set spd(spd: number) { this._spd = spd }
 
     get type1(): string { return this._type1 }
     set type1(type: string) { this._type1 = type }
