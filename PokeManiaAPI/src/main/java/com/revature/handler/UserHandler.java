@@ -2,8 +2,6 @@ package com.revature.handler;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -42,7 +40,7 @@ public class UserHandler {
 	}
 
 	public static void handleAddFriend(HttpServletRequest request, HttpServletResponse response) {
-		logger.info("Inside the Add Friend Request Handler");
+		logger.info("Inside Add Friend Request Handler");
 		logger.info("Friend username: {}", request.getParameter("friendusername"));
 		try {
 			User user = (User) Json.read(request.getInputStream(), User.class);
@@ -65,7 +63,7 @@ public class UserHandler {
 	}
 	
 	public static void handleGetFriends(HttpServletRequest request, HttpServletResponse response) {
-		logger.info("Inside the Get Friends UserHandler");
+		logger.info("Inside Get Friends UserHandler");
 		int userId = Integer.parseInt(request.getParameter("userid"));
 		logger.info("Your user ID is: {}", userId);
 		try {
@@ -77,14 +75,50 @@ public class UserHandler {
 				response.getOutputStream().write(Json.write(friends));
 				return;
 			}
-			
 		} catch (SQLException | IOException e) {
 			logger.warn("Exception was thrown: {}", e);
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
-		
-		
+	}
+	
+	public static void handleUpdateUser(HttpServletRequest request, HttpServletResponse response) {
+		logger.info("Inside User Update Handler");
+		try {
+			User user = (User) Json.read(request.getInputStream(), User.class);
+			boolean wasSuccessful = dao.updateStats(user);
+			if(wasSuccessful) {
+				response.setStatus(HttpServletResponse.SC_ACCEPTED);
+				logger.info("Updated User Stats");
+				return;
+			} else {
+				response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+				logger.info("Unable to Update Stats. Bad Request");
+				return;
+			}
+		} catch (IOException | SQLException e) {
+			logger.warn("Exception encounterd in Handle Update User: {}", e);
+		}
+	}
+	
+	
+	public static void handleUpdateCounter(HttpServletRequest request, HttpServletResponse response) {
+		logger.info("Inside User Update Counter");
+		try {
+			User user = (User) Json.read(request.getInputStream(), User.class);
+			boolean wasSuccessful = dao.updateCounter(user);
+			if(wasSuccessful) {
+				response.setStatus(HttpServletResponse.SC_ACCEPTED);
+				logger.info("Updated User Counter");
+				return;
+			} else {
+				response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+				logger.info("Unable to Update Counter.");
+				return;
+			}
+		} catch (IOException | SQLException e) {
+			logger.warn("Exception encounterd in Handle Update Counter: {}", e);
+		}
 	}
 	
 }

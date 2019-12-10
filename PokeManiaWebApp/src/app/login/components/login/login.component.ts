@@ -3,6 +3,7 @@ import { UserService } from '../../services/user.service';
 import { User } from '../../../models/User'
 import { HttpClient } from '@angular/common/http'
 import { LoginForm } from 'src/app/models/LoginForm';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',

@@ -246,21 +246,24 @@ public class PokemonDaoSql implements PokemonDao {
 	 * @exception SQLException Throw when there's an issue talking with the db
 	 */
 	@Override
-	public boolean saveTeam(Pokemon[] pokemon) throws SQLException {
+	public boolean saveTeam(int userID, int[]pokeTeam) throws SQLException {
 		
 		PreparedStatement	ps;
 		
-		clearTeam(pokemon[0].getTrainerId());
+		clearTeam(userID);
 		
 		try(Connection c = ConnectionUtil.getConnection()) {
 			
 			ps = c.prepareStatement(SAVE_TEAM_SQL);
 			
 			//Add each pokemon to a batch for an efficient whole team write
-			for(Pokemon poke : pokemon) {
+			for(int poke : pokeTeam) {
 				
-				ps.setInt(1, poke.getTrainerId());
-				ps.setInt(2, poke.getId());
+				if (poke == 0) {
+					break;
+				}
+				ps.setInt(1, userID);
+				ps.setInt(2, poke);		
 				ps.addBatch();
 				ps.clearParameters();
 				

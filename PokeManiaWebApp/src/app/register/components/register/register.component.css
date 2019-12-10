@@ -4,7 +4,7 @@ form {
     flex-direction: column;
     justify-content: space-between;
     background-color: rgb(126, 126, 235);
-    min-height: 170px;
+    min-height: 450px;
     width: 25%;
     margin-left: auto;
     margin-right: auto;
@@ -16,32 +16,17 @@ form {
 
 }
 
-h6 {
-
-    margin: 0px;
-    padding: 2px;
-    text-align: center;
-    font-size: 12pt;
-    background-color: rgba(255, 0, 0);
-    border-radius: 5px;
-    font-family: Arial, Helvetica, sans-serif;
-
-}
-
 button {
 
     font-family: cursive, times, arial;
     font-size: 14pt;
     margin-top: 5px;
-    width: 48%;
-
 }
 
-#buttons {
+input {
 
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    padding: 5px;
+    border-radius: 5px;
 
 }
 
@@ -52,15 +37,32 @@ button {
 
 }
 
-video {
+.red {
+
+    color: red;
+    font-size: 20pt;
+
+}
+
+.tooltip {
 
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    margin-top: 20px;
+
+}
+
+.tooltip .tooltiptext {
+
+    visibility: hidden;
+    width: auto;
+    background-color: red;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
     margin-left: auto;
     margin-right: auto;
-    width: 25%;
-    height: auto;
-    border-radius: 10px;
+    margin-top: 10px;
 
 }

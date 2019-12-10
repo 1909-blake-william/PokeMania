@@ -18,7 +18,7 @@ public interface PokemonDao {
 	Pokemon[] fetchTeam(int userID) throws SQLException;
 	Pokemon[] fetchBox(int userID) throws SQLException;
 	boolean savePokemon(Pokemon pokemon) throws SQLException;
-	boolean saveTeam(Pokemon[] pokemon) throws SQLException;
+	boolean saveTeam(int userID, int[] pokeTeam) throws SQLException;
 	boolean releasePoke(int pokemonID) throws SQLException;
 	
 }

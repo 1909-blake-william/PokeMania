@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import com.revature.dao.PokemonDao;
 import com.revature.dao.PokemonDaoSql;
 import com.revature.model.Pokemon;
+import com.revature.model.Team;
 import com.revature.util.Json;
 
 public class PokemonHandler {
@@ -71,10 +72,17 @@ public class PokemonHandler {
 	
 	public static void handleUpdateUsersTeam(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			Pokemon[] pokemon = (Pokemon[]) Json.read(request.getInputStream(), Pokemon.class);
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			Team team = (Team) Json.read(request.getInputStream(), Team.class);
+			int userId = team.getUserId();
+			int[] pokeTeam = new int[]{team.getPoke1(),team.getPoke2(), team.getPoke3(), team.getPoke4(), team.getPoke5(), team.getPoke6()};
+			boolean wasSuccessful = dao.saveTeam(userId, pokeTeam);
+			if (wasSuccessful) {
+				response.setStatus(HttpServletResponse.SC_CREATED);
+				return;
+			} else {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			}
+		} catch (IOException | SQLException e) {
 			e.printStackTrace();
 		}
 	
