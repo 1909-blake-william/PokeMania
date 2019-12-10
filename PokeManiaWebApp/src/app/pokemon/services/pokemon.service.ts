@@ -6,6 +6,7 @@ import { Pokemon } from 'src/app/models/Pokemon';
 import { ReplaySubject, Subject } from 'rxjs';
 import { PokemonModule } from '../pokemon.module';
 import { Team } from 'src/app/models/Team';
+import { Router } from '@angular/router';
 
 // this service is used to get pokemon from DB for team and box
 // also used to send from box and to team
@@ -34,7 +35,11 @@ export class PokemonService {
 
 
 
-  constructor(private httpClient: HttpClient, private userService: UserService) {
+  constructor(private httpClient: HttpClient, private userService: UserService, private router: Router) {
+
+    if (!this.user) {
+      this.router.navigateByUrl('/login');
+    }
 
     // user id is hard coded in for now, should use this
     this.httpClient.get<Pokemon[]>(`http://localhost:8080/PokeManiaAPI/api/pokemon?userId=${this.user.id}`, {
