@@ -29,7 +29,8 @@ public class PokemonDaoSql implements PokemonDao {
 											GET_TEAM_SQL	= "SELECT * FROM pokemon WHERE pokemon_id IN (SELECT pokemon_id FROM pokemon_team WHERE trainer_id = ?)",
 											SAVE_ONE_SQL	= "INSERT INTO pokemon (trainer_id, pokedex_id, pokemon_level, "
 															+ "pokemon_hp, pokemon_att, pokemon_def, pokemon_speed, pokemon_type1, "
-															+ "pokemon_type2 front_image, back_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+															+ "pokemon_type2, front_image, back_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+											GET_CATCH_ID_SQL= "SELECT * FROM pokemon WHERE trainer_id = ? AND pokedex_id = ?",
 											SAVE_TEST_SQL	= "INSERT INTO pokemon VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 											SAVE_TEAM_SQL	= "INSERT INTO pokemon_team VALUES (?, ?)",
 											CLEAR_TEAM_SQL	= "DELETE FROM pokemon_team WHERE trainer_id = ?",
@@ -163,16 +164,17 @@ public class PokemonDaoSql implements PokemonDao {
 	}
 
 	/**
-	 * Save a single pokemon to the db
+	 * Save a single pokemon to the db, then return the pokemon's id
 	 * 
 	 * @param pokemon The pokemon to save
-	 * @return Whether save was successful
+	 * @return The generated id
 	 * @exception SQLException Throw when there's an issue talking with the db
 	 */
 	@Override
-	public boolean savePokemon(Pokemon pokemon) throws SQLException {
+	public int savePokemon(Pokemon pokemon) throws SQLException {
 		
 		PreparedStatement	ps;
+		PreparedStatement   psq;
 		
 		try(Connection c = ConnectionUtil.getConnection()) {
 			
@@ -189,7 +191,20 @@ public class PokemonDaoSql implements PokemonDao {
 			ps.setString(10, pokemon.getFrontImg());
 			ps.setString(11, pokemon.getBackImg());
 			
-			return ps.executeUpdate() == 1;
+			ps.executeUpdate();
+			
+			
+			psq = c.prepareStatement(GET_CATCH_ID_SQL);
+			psq.setInt(1, pokemon.getTrainerId());
+			psq.setInt(2, pokemon.getDexNum());
+			
+			ResultSet rs = psq.executeQuery();
+			int id = 0;
+			if (rs.next()) {
+				id = rs.getInt(1);
+			}
+			
+			return id;
 			
 		} catch(SQLException e) {
 			

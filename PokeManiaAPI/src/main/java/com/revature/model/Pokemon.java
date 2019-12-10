@@ -19,11 +19,11 @@ public class Pokemon {
 					type2,
 					frontImg,
 					backImg;
-	public Pokemon(int id, int trainerId, int dexNum, int level, int hp, int att, int def, int spd, String type1,
+	public Pokemon(int id, int trainerID, int dexNum, int level, int hp, int att, int def, int spd, String type1,
 			String type2, String frontImg, String backImg) {
 		super();
 		this.id = id;
-		this.trainerID = trainerId;
+		this.trainerID = trainerID;
 		this.dexNum = dexNum;
 		this.level = level;
 		this.hp = hp;
@@ -52,8 +52,8 @@ public class Pokemon {
 		return trainerID;
 	}
 
-	public void setTrainerId(int trainerId) {
-		this.trainerID = trainerId;
+	public void setTrainerId(int trainerID) {
+		this.trainerID = trainerID;
 	}
 
 	public int getDexNum() {
@@ -160,7 +160,7 @@ public class Pokemon {
 
 	@Override
 	public String toString() {
-		return "Pokemon [id=" + id + ", trainerId=" + trainerID + ", dexNum=" + dexNum + ", level=" + level + ", hp="
+		return "Pokemon [id=" + id + ", trainerID=" + trainerID + ", dexNum=" + dexNum + ", level=" + level + ", hp="
 				+ hp + ", att=" + att + ", def=" + def + ", spd=" + spd + ", type1=" + type1 + ", type2=" + type2
 				+ ", frontImg=" + frontImg + ", backImg=" + backImg + "]";
 	}
