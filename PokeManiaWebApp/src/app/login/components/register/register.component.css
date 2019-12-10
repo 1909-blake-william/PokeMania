@@ -44,7 +44,7 @@ input {
 
 }
 
-.tooltip {
+.not-boostrap-tooltip {
 
     display: flex;
     flex-direction: column;
@@ -52,7 +52,7 @@ input {
 
 }
 
-.tooltip .tooltiptext {
+.not-boostrap-tooltip .not-bootstrap-tooltiptext {
 
     visibility: hidden;
     width: auto;

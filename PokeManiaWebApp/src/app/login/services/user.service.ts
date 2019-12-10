@@ -1,23 +1,19 @@
 import { Injectable } from '@angular/core';
 import { User } from '../../models/User';
-import { Observable, of} from 'rxjs';
+import { Observable, of, ReplaySubject} from 'rxjs';
 
 @Injectable()
 export class UserService {
 
-  private user: User;
+  private _user: User = null
+  private userStream = new ReplaySubject<User>(1)
+  public $user  = this.userStream.asObservable()
 
   constructor() { }
 
-  getUser(): Observable<User> {
+  public setUser(user: User) {
 
-    return of(this.user);
-
-  }
-
-  setUser(user: User) {
-
-    this.user = user;
+    this.userStream.next(user)
 
   }
 

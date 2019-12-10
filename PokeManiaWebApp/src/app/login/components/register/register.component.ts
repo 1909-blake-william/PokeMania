@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '../../../models/User'
 import { Pokemon } from '../../../models/Pokemon'
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -25,7 +26,7 @@ export class RegisterComponent implements OnInit {
   public showError: boolean = false
   public errorMsg: string = ''
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   ngOnInit() {
   }
@@ -40,8 +41,27 @@ export class RegisterComponent implements OnInit {
     user = new User(this.username, this.firstname, this.lastname, 0, 0, 0, 0, 0, 0)
     pokemon = await this.getPokemon()
 
-    //send new user data to API
-    //send pokemon to API
+    try {
+      
+      this.http.post(`http://localhost:8080/PokeManiaAPI/api/createuser?password=${this.password1}`, JSON.stringify(user), {withCredentials: true}).toPromise().then(userID => {
+
+        this.getPokemon().then(pokemon => {
+
+          pokemon.trainerId = <number> userID
+
+          this.http.post('http://www.localhost:8080/PokeManiaAPI/api/pokemon', JSON.stringify(pokemon), {withCredentials: true}).toPromise().then(resp => {})
+
+        })
+
+      })
+
+    } catch(err) {
+
+      console.error(err)
+
+    }
+
+    //this.router.navigateByUrl('')
 
   }
 
@@ -82,7 +102,7 @@ export class RegisterComponent implements OnInit {
 
     pokemon = new Pokemon(0, 0, response.id, 1, response.stats[5].base_stat, response.stats[4].base_stat,
                           response.stats[3].base_stat, response.stats[0].base_stat, type1, type2, 
-                          response.sprites['front_default'], response.sprites['back_default'])
+                          response.sprites['front_default'], response.sprites['back_default'] ? response.sprites['back_default'] : 'img')
 
     return pokemon
 

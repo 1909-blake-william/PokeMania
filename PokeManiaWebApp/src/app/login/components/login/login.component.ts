@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   public errorExists: boolean = false
   public errorMsg: string = ''
 
-  constructor(private userService: UserService, private http: HttpClient) { }
+  constructor(private userService: UserService, private http: HttpClient, private router: Router) { }
 
   ngOnInit() {
   }
@@ -28,24 +28,37 @@ export class LoginComponent implements OnInit {
 
     if(!this.checkErrors()) return
 
-    user = this.getUser()
+    this.getUser().then(user => {
 
-    if(user !== null) {
-    
-      this.userService.setUser(user);
-      //Route to next component
+      if(user !== undefined) {
+      
+        this.userService.setUser(user);
+        this.router.navigateByUrl('/poke')
 
-    } else this.displayError('Invalid login')
+      } else this.displayError('Invalid login')
+
+    })
 
   }
 
-  getUser(): User {
+  async getUser(): Promise<User> {
 
     let loginInfo: LoginForm = new LoginForm(this.username, this.password)
-    const response = this.http.post('url', JSON.stringify(loginInfo))
+    let response
+    
+    try {
+    
+      response = await this.http.post('http://localhost:8080/PokeManiaAPI/api/login', JSON.stringify(loginInfo), {withCredentials: true}).toPromise()
 
-    //Get data from response and put into a User obj and return
-    return null
+    } catch(err) {
+
+      console.error(err)
+
+    }
+
+    console.log(response)
+    
+    return <User> response
 
   }
 

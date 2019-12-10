@@ -27,12 +27,12 @@ public class UserDaoSql implements UserDao {
 	private static final UserDaoSql instance = new UserDaoSql();
 	private static final Logger logger = LogManager.getLogger(UserDaoSql.class);
 	private static final String GET_USER_SQL = "SELECT * FROM trainers WHERE trainer_name = ?",
-			INSERT_USER_SQL = "INSERT INTO trainers (trainer_name, trainer_password, first_name, last_name, badges, wins, losses)"
+			INSERT_USER_SQL = "INSERT INTO trainers (trainer_name, trainer_password, first_name, last_name, badges, wins, losses, counter, ctime)"
 					+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
 			INSERT_TEST_SQL = "INSERT INTO trainers VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 			LOGIN_SQL = "SELECT trainer_password FROM trainers WHERE trainer_name = ?",
 			FETCH_FRND_IDS = "SELECT * FROM friends WHERE trainer_id1 = ? OR trainer_id2 = ?",
-			FETCH_FRND_NMS = "SELECT trainer_name FROM trainers WHERE trainer_id = ",
+			FETCH_FRND 	= "SELECT * FROM trainers WHERE trainer_id = ",
 			ADD_FRND = "INSERT INTO friends VALUES ((SELECT trainer_id FROM trainers WHERE trainer_name = ?), "
 					+ "(SELECT trainer_id FROM trainers WHERE trainer_name = ?))",
 			UPDATE_STATS = "UPDATE trainers SET badges = ?, wins = ?, losses = ? WHERE trainer_id = ?",
@@ -99,10 +99,10 @@ public class UserDaoSql implements UserDao {
 	 * @exception SQLException Thrown when there's an issue talking to the db
 	 */
 	public int addNewUser(User user, String password) throws SQLException {
-		// (trainer_name, trainer_password, first_name, last_name, badges, wins, losses)
 
-		PreparedStatement ps = null;
-		PreparedStatement psq = null;
+		PreparedStatement ps 	= null;
+		ResultSet		  rs;
+		int				  id 	= 0;
 
 		try (Connection c = ConnectionUtil.getConnection()) {
 
@@ -119,16 +119,15 @@ public class UserDaoSql implements UserDao {
 			ps.setInt(7, 0);
 			ps.setInt(8, 0);
 			ps.setInt(9, 0);
-
+			
 			ps.executeUpdate();
 			
-			psq = c.prepareStatement(GET_USER_SQL);
-			psq.setString(1, user.getUsername());
-			ResultSet rs = psq.executeQuery();
-			int id = 0;
-			if(rs.next()) {
-				id = rs.getInt(1);
-			}
+			ps = c.prepareStatement(GET_USER_SQL);
+			ps.setString(1, user.getUsername());
+			rs = ps.executeQuery();
+			
+			if(rs.next()) id = rs.getInt(1);
+			
 			return id;
 
 		} catch (SQLException e) {
@@ -234,9 +233,8 @@ public class UserDaoSql implements UserDao {
 			if (rs.next())
 
 				if (password.equals(Password.transformPasswd(rs.getString(1), username)))
-					;
 
-			user = this.fetchUser(username);
+					user = this.fetchUser(username);
 
 		} catch (SQLException e) {
 
@@ -253,21 +251,26 @@ public class UserDaoSql implements UserDao {
 	 * 
 	 * @param userID Takes the ID of the logged in user to find the friends of said
 	 *               user
-	 * @return Returns a list of the friends' names
+	 * @return Returns a list of the friend objs
 	 * @exception SQLException Thrown when there's an issue talking to the db
 	 */
 	@Override
-	public String[] getFriends(int userID) throws SQLException {
+	public User[] getFriends(int userID) throws SQLException {
 
 		LinkedList<Integer> friendIDs = getFriendIDs(userID);
+<<<<<<< HEAD
 		List<String> friendNames = null;
+=======
+		List<User> friends = null;
+
+>>>>>>> bf1c5c1f6ff261cae854d52c07916e00972d0164
 		if (friendIDs.size() == 0) // No friends
 
 			return null;
 
-		friendNames = getFriendNames(createIDsString(friendIDs));
+		friends = getFriends(createIDsString(friendIDs));
 
-		return friendNames.toArray(new String[0]);
+		return friends.toArray(new User[0]);
 
 	}
 
@@ -346,28 +349,28 @@ public class UserDaoSql implements UserDao {
 
 	/**
 	 * Helper method to break up code. Takes in the formated id string and retreives
-	 * the list of the friends' usernames
+	 * the list of the friends objs
 	 * 
 	 * @param idList String of ids ex: "1 OR 3 OR 2"
-	 * @return An ArrayList of the friends' usernames
+	 * @return An ArrayList of the friends objs
 	 * @throws SQLException Thrown when there's an issue talking to the db
 	 */
-	private List<String> getFriendNames(String idList) throws SQLException {
+	private List<User> getFriends(String idList) throws SQLException {
 
 		PreparedStatement ps;
 		ResultSet rs;
-		List<String> names = new ArrayList<>();
+		List<User> users = new ArrayList<>();
 
 		try (Connection c = ConnectionUtil.getConnection()) {
 
-			ps = c.prepareStatement(FETCH_FRND_NMS + idList);
+			ps = c.prepareStatement(FETCH_FRND + idList);
 			rs = ps.executeQuery();
 
 			while (rs.next())
 
-				names.add(rs.getString(1));
+				users.add(new User(rs.getString(2), rs.getString(4), rs.getString(5), rs.getInt(1), rs.getInt(6), rs.getInt(7), rs.getInt(8), rs.getInt(9),rs.getLong(10)));
 
-			return names;
+			return users;
 
 		} catch (SQLException e) {
 
