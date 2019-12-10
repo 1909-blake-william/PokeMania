@@ -8,11 +8,13 @@ import { PokemonModule } from './pokemon/pokemon.module';
 import { FriendsComponent } from './friends/components/friends/friends.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavComponent
+    NavComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,

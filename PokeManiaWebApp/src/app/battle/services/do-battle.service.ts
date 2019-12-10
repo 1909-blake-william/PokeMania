@@ -41,7 +41,7 @@ export class DoBattleService {
       mod2 = this.typeAdvCalc.modifierCalc(pokemon2, pokemon1)
 
       //Who goes first?
-      let p1GoesFirst = pokemon1.speed >= pokemon2.speed
+      let p1GoesFirst = pokemon1.spd >= pokemon2.spd
 
       //While both fighting pokemon haven't fainted
       while(pokemon1.hp > 0 && pokemon2.hp > 0) {
@@ -82,7 +82,7 @@ export class DoBattleService {
     const MOVE_POWER = 60
 
     //The real formula from the games
-    return Math.floor(((((2 * atkr.level) / 5 + 2) * MOVE_POWER * (atkr.att / dfndr.def)) / 50 + 2) * typeAdv)
+    return Math.floor(((((2 * atkr.level) / 5 + 2) * MOVE_POWER * (atkr.att / dfndr.def)) / 50 + 10) * typeAdv)
 
   }
 

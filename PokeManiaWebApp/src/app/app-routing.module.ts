@@ -10,6 +10,7 @@ import { PokemonModule } from './pokemon/pokemon.module';
 import { PokemonComponentComponent } from './pokemon/components/pokemon-component/pokemon-component.component';
 import { FriendsComponent } from './friends/components/friends/friends.component';
 import { FriendsModule } from './friends/friends.module';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 
 const routes: Routes = [
@@ -32,8 +33,11 @@ const routes: Routes = [
   {
     path: 'friends',
     component: FriendsComponent
+  },
+  {
+    path: '**',
+    component: PageNotFoundComponent
   }
-  
 ];
 
 @NgModule({

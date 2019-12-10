@@ -28,8 +28,8 @@ public class UserDaoSql implements UserDao {
 	private static final Logger logger = LogManager.getLogger(UserDaoSql.class);
 	private static final String GET_USER_SQL = "SELECT * FROM trainers WHERE trainer_name = ?",
 			INSERT_USER_SQL = "INSERT INTO trainers (trainer_name, trainer_password, first_name, last_name, badges, wins, losses)"
-					+ " VALUES (?, ?, ?, ?, ?, ?, ?)",
-			INSERT_TEST_SQL = "INSERT INTO trainers VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+					+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+			INSERT_TEST_SQL = "INSERT INTO trainers VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 			LOGIN_SQL = "SELECT trainer_password FROM trainers WHERE trainer_name = ?",
 			FETCH_FRND_IDS = "SELECT * FROM friends WHERE trainer_id1 = ? OR trainer_id2 = ?",
 			FETCH_FRND_NMS = "SELECT trainer_name FROM trainers WHERE trainer_id = ",
@@ -116,6 +116,8 @@ public class UserDaoSql implements UserDao {
 			ps.setInt(5, 0);
 			ps.setInt(6, 0);
 			ps.setInt(7, 0);
+			ps.setInt(8, 0);
+			ps.setInt(9, 0);
 
 			return ps.executeUpdate() == 1;
 
@@ -154,6 +156,8 @@ public class UserDaoSql implements UserDao {
 			ps.setInt(6, user.getBadges());
 			ps.setInt(7, user.getWins());
 			ps.setInt(8, user.getLosses());
+			ps.setInt(9, user.getCounter());
+			ps.setLong(10, user.getcTime());
 
 			return ps.executeUpdate() == 1;
 
