@@ -238,6 +238,7 @@ export class PokemonService {
         const boxSubscription = this.$box.subscribe(pokes => {
           pokeBox = pokes;
         });
+        poke.id = data;
         pokeBox.push(poke);
         this.boxStream.next(pokeBox); // send data to stream so components will update
         boxSubscription.unsubscribe(); // subscription no longer need
