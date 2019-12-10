@@ -5,6 +5,7 @@ import { User } from 'src/app/models/User';
 import { Pokemon } from 'src/app/models/Pokemon';
 import { ReplaySubject, Subject } from 'rxjs';
 import { PokemonModule } from '../pokemon.module';
+import { Team } from 'src/app/models/Team';
 
 // this service is used to get pokemon from DB for team and box
 // also used to send from box and to team
@@ -15,7 +16,8 @@ import { PokemonModule } from '../pokemon.module';
 })
 export class PokemonService {
 
-  teamSize = 0;
+  sizeStream = new ReplaySubject<number>(1);
+  $size = this.sizeStream.asObservable();
   // used to track number of pokemon in team,
   // if it = 6 then can't move from box into team
 
@@ -39,7 +41,6 @@ export class PokemonService {
       withCredentials: true
     })
       .subscribe(data => {
-        // let allPokemon = data;
         this.boxStream.next(data);
       }, err => {
         console.log(err);
@@ -51,7 +52,8 @@ export class PokemonService {
     })
       .subscribe(data => {
         this.teamStream.next(data);
-        this.teamSize = data.length;
+        this.sizeStream.next(data.length);
+
       }, err => {
         console.log(err);
       });
@@ -70,8 +72,25 @@ export class PokemonService {
     this.teamStream.next(pokeTeam);
     teamSubscription.unsubscribe();
 
+
+    // now we need to put user id and poke ids into the "team" object
+
+    let teamObject: Team;
+    let nums: number[] = new Array(6);
+
+    // tslint:disable-next-line: no-shadowed-variable
+    for (let i = 0; i < 6; i++) {
+      if (pokeTeam[i]) {
+        nums[i] = pokeTeam[i].id;
+      } else {
+        nums[i] = 0;
+      }
+    }
+
+    teamObject = new Team(285, nums[0], nums[1], nums[2], nums[3], nums[4], nums[5]);
+
     // http request to add to team in DB
-    this.httpClient.post(`http://localhost:8080/PokeManiaAPI/api/pokemonteam?userId=${285}`, pokeTeam, {
+    this.httpClient.post(`http://localhost:8080/PokeManiaAPI/api/pokemonteam?userId=${285}`, teamObject, {
       withCredentials: true
     }).subscribe(
       data => {
@@ -82,7 +101,7 @@ export class PokemonService {
       }
     );
 
-    // remove pokemon going to team
+    // remove pokemon going to Team
     let i = 0;
     pokeBox.forEach(element => {
       if (element === poke) {
@@ -95,14 +114,16 @@ export class PokemonService {
 
   // get box, then add pokemon to it (remove from team) then update both streams.
   toBox(poke, pokeTeam) {
+
     // first get the box then add the new pokemon onto the end
     let pokeBox: Pokemon[];
     const boxSubscription = this.$box.subscribe(pokes => {
       pokeBox = pokes;
+      pokeBox.push(poke);
     });
-    pokeBox.push(poke);
     this.boxStream.next(pokeBox); // send data to stream so components will update
     boxSubscription.unsubscribe(); // subscription no longer need
+
 
 
     // remove pokemon going to box
@@ -115,8 +136,24 @@ export class PokemonService {
     });
     this.teamStream.next(pokeTeam);
 
+    // now we need to put user id and poke ids into the "team" object
+
+    let teamObject: Team;
+    let nums: number[] = new Array(6);
+
+    // tslint:disable-next-line: no-shadowed-variable
+    for (let i = 0; i < 6; i++) {
+      if (pokeTeam[i]) {
+        nums[i] = pokeTeam[i].id;
+      } else {
+        nums[i] = 0;
+      }
+    }
+
+    teamObject = new Team(285, nums[0], nums[1], nums[2], nums[3], nums[4], nums[5]);
+
     // http request to remove poke from team in DB
-    this.httpClient.post(`http://localhost:8080/PokeManiaAPI/api/pokemonteam?userId=${285}`, pokeTeam, {
+    this.httpClient.post(`http://localhost:8080/PokeManiaAPI/api/pokemonteam?userId=${285}`, teamObject, {
       withCredentials: true
     }).subscribe(
       data => {
@@ -190,7 +227,6 @@ export class PokemonService {
   catchPoke(poke) {
     // this.user.counter++;
     // this.user.cTime = Date.now();
-    console.log(poke);
 
     this.httpClient.post(`http://localhost:8080/PokeManiaAPI/api/pokemon`, poke, {
       withCredentials: true

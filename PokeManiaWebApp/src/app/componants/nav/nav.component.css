@@ -17,3 +17,7 @@
     border: 1px dotted black
 
 }
+
+.nav-item:hover {
+    cursor: pointer;
+}

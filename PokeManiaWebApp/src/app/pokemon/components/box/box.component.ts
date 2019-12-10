@@ -18,10 +18,12 @@ export class BoxComponent implements OnInit {
 
   pokemon: Pokemon[] = [];
   team: Pokemon[] = [];
-  teamSize = this.pokemonService.teamSize;
+  teamSize = 0;
+
 
   boxSubscription: Subscription;
   teamSubscription: Subscription;
+  sizeSubscription: Subscription;
 
   // When this page is routed to, it gets all pokemon for the user
   // this is done by subscribing to box observable from pokemon.service
@@ -29,11 +31,14 @@ export class BoxComponent implements OnInit {
   // and then only display what isn't in the team
 
   ngOnInit() {
+    this.sizeSubscription = this.pokemonService.$size.subscribe(num => {
+      this.teamSize = num;
+    });
     this.boxSubscription = this.pokemonService.$box.subscribe(pokes => {
       this.pokemon = pokes;
       let i = 0;
-      for (let poke of this.team) {
-        for (let pokeB of this.pokemon) {
+      for (const poke of this.team) {
+        for (const pokeB of this.pokemon) {
           if (poke.id === pokeB.id) {
             this.pokemon.splice(i, 1);
           }
@@ -48,8 +53,8 @@ export class BoxComponent implements OnInit {
     this.teamSubscription = this.pokemonService.$team.subscribe(pokes => {
       this.team = pokes;
       let i = 0;
-      for (let poke of this.team) {
-        for (let pokeB of this.pokemon) {
+      for (const poke of this.team) {
+        for (const pokeB of this.pokemon) {
           if (poke.id === pokeB.id) {
             this.pokemon.splice(i, 1);
           }
@@ -60,15 +65,19 @@ export class BoxComponent implements OnInit {
       this.teamSubscription.unsubscribe();
     });
 
+
   }
 
   toTeam(poke) {
     this.pokemonService.toTeam(poke, this.pokemon);
+    const tempSize = this.teamSize + 1;
+    this.pokemonService.sizeStream.next(tempSize);
   }
 
   // when component is destroyed, we dont want subscription left open
   ngOnDestroy() {
     this.boxSubscription.unsubscribe();
+    this.sizeSubscription.unsubscribe();
 
   }
 

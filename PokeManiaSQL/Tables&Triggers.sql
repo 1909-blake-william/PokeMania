@@ -97,6 +97,7 @@ ADD cTime NUMBER;
 SELECT * FROM trainers;
 SELECT * FROM pokemon;
 SELECT * FROM pokemon_team;
+SELECT * FROM friends;
 
 INSERT INTO pokemon
 (pokemon_id, trainer_id, pokedex_id, pokemon_level, pokemon_hp, pokemon_att, pokemon_def, pokemon_speed, pokemon_type1, front_image, back_image)
