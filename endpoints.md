@@ -8,7 +8,11 @@
 
 > **INFO - Get info about current user sesson**
 * Method: GET
-* Endpoint: /PokeManiaAPI/api/info  
+* Endpoint: /PokeManiaAPI/api/info 
+
+> **LOGOUT**
+* Method: PUT
+* Endpoint: /PokeManiaAPI/api/logout
 
 #### **UserDispatcher**
 

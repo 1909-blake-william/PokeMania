@@ -91,8 +91,9 @@ public class PokemonHandler {
 	public static void handleCatchPokemon(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			Pokemon pokemon = (Pokemon) Json.read(request.getInputStream(), Pokemon.class);
-			boolean wasSuccessful = dao.savePokemon(pokemon);
-			if (wasSuccessful) {
+			int successCode = dao.savePokemon(pokemon);
+			if (successCode > 0) {
+				response.getWriter().write(Integer.toString(successCode));
 				response.setStatus(HttpServletResponse.SC_CREATED);
 				return;
 			} else {

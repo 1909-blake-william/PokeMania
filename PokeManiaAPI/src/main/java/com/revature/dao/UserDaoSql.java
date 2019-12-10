@@ -90,18 +90,19 @@ public class UserDaoSql implements UserDao {
 
 	/**
 	 * Register a new user to the system by passing in all the user info needed.
-	 * Writes to the db
+	 * Writes to the db, then return the user id
 	 * 
 	 * @param user     User object with the user's data. Password for the user for
 	 *                 loggin in
 	 * @param password The password they user wants to set
-	 * @return Whether the user was saved successfully
+	 * @return Newly generate user id
 	 * @exception SQLException Thrown when there's an issue talking to the db
 	 */
-	public boolean addNewUser(User user, String password) throws SQLException {
+	public int addNewUser(User user, String password) throws SQLException {
 		// (trainer_name, trainer_password, first_name, last_name, badges, wins, losses)
 
 		PreparedStatement ps = null;
+		PreparedStatement psq = null;
 
 		try (Connection c = ConnectionUtil.getConnection()) {
 
@@ -119,7 +120,16 @@ public class UserDaoSql implements UserDao {
 			ps.setInt(8, 0);
 			ps.setInt(9, 0);
 
-			return ps.executeUpdate() == 1;
+			ps.executeUpdate();
+			
+			psq = c.prepareStatement(GET_USER_SQL);
+			psq.setString(1, user.getUsername());
+			ResultSet rs = psq.executeQuery();
+			int id = 0;
+			if(rs.next()) {
+				id = rs.getInt(1);
+			}
+			return id;
 
 		} catch (SQLException e) {
 

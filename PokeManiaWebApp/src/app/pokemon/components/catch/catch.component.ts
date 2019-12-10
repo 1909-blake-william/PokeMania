@@ -31,6 +31,7 @@ async findPoke() {
 
 catchPoke() {
   this.pokemonService.catchPoke(this.pokemon);
+  this.pokemon = null;
 }
 
 }
