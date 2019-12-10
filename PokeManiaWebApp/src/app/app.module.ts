@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { NavComponent } from './components/nav/nav.component';
 import { AppRoutingModule } from './app-routing.module';
 import { PokemonModule } from './pokemon/pokemon.module';
-import { FriendsComponent } from './friends/components/friends/friends.component';
+//import { FriendsComponent } from './friends/components/friends/friends.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';

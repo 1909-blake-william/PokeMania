@@ -43,7 +43,17 @@ export class RegisterComponent implements OnInit {
 
     try {
       
-      console.log(await this.http.post(`http://localhost:8080/PokeManiaAPI/api/createuser?password=${this.password1}`, JSON.stringify(user), {withCredentials: true}))
+      this.http.post(`http://localhost:8080/PokeManiaAPI/api/createuser?password=${this.password1}`, JSON.stringify(user), {withCredentials: true}).toPromise().then(userID => {
+
+        this.getPokemon().then(pokemon => {
+
+          pokemon.trainerId = <number> userID
+
+          this.http.post('http://www.localhost:8080/PokeManiaAPI/api/pokemon', JSON.stringify(pokemon), {withCredentials: true}).toPromise().then(resp => {})
+
+        })
+
+      })
 
     } catch(err) {
 
@@ -52,7 +62,6 @@ export class RegisterComponent implements OnInit {
     }
 
     //this.router.navigateByUrl('')
-    //send pokemon to API
 
   }
 
@@ -93,7 +102,7 @@ export class RegisterComponent implements OnInit {
 
     pokemon = new Pokemon(0, 0, response.id, 1, response.stats[5].base_stat, response.stats[4].base_stat,
                           response.stats[3].base_stat, response.stats[0].base_stat, type1, type2, 
-                          response.sprites['front_default'], response.sprites['back_default'])
+                          response.sprites['front_default'], response.sprites['back_default'] ? response.sprites['back_default'] : 'img')
 
     return pokemon
 
