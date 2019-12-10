@@ -227,12 +227,14 @@ export class PokemonService {
   catchPoke(poke) {
     // this.user.counter++;
     // this.user.cTime = Date.now();
+    if (!poke.backImg) {
+      poke.backImg = ' ';
+    }
 
     let pokeBox: Pokemon[];
-        const boxSubscription = this.$box.subscribe(pokes => {
+    const boxSubscription = this.$box.subscribe(pokes => {
         pokeBox = pokes;
         });
-        console.log(pokeBox);
 
     this.httpClient.post(`http://localhost:8080/PokeManiaAPI/api/pokemon`, poke, {
       withCredentials: true
@@ -245,7 +247,6 @@ export class PokemonService {
         pokeBox.push(poke);
         this.boxStream.next(pokeBox); // send data to stream so components will update
         boxSubscription.unsubscribe(); // subscription no longer need
-        
       },
       err => {
         console.log(err);
