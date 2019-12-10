@@ -2,6 +2,8 @@
 
     width: 100%;
     background-color: rgb(126, 126, 235);
+    display: flex;
+    flex-direction: row;
 
 }
 

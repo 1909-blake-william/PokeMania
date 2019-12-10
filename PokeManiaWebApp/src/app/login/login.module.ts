@@ -4,6 +4,7 @@ import { LoginComponent } from './components/login/login.component';
 import { UserService } from './services/user.service';
 import { FormsModule } from '@angular/forms'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
+import { RouterModule } from '@angular/router';
 
 
 
@@ -13,7 +14,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http'
   imports: [
     CommonModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule
   ]
 })
 export class LoginModule { }
