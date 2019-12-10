@@ -6,6 +6,11 @@ import { RegisterModule } from './register/register.module'
 import { RegisterComponent } from './register/components/register/register.component'
 import { BattleComponent } from './battle/components/battle/battle.component';
 import { BattleModule } from './battle/battle.module';
+import { PokemonModule } from './pokemon/pokemon.module';
+import { PokemonComponentComponent } from './pokemon/components/pokemon-component/pokemon-component.component';
+import { FriendsComponent } from './friends/components/friends/friends.component';
+import { FriendsModule } from './friends/friends.module';
+
 
 const routes: Routes = [
   {
@@ -19,7 +24,16 @@ const routes: Routes = [
   {
     path: 'battle',
     component: BattleComponent
+  },
+  {
+    path: 'poke',
+    component: PokemonComponentComponent
+  },
+  {
+    path: 'friends',
+    component: FriendsComponent
   }
+  
 ];
 
 @NgModule({
@@ -27,7 +41,9 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     LoginModule,
     RegisterModule,
-    BattleModule
+    BattleModule,
+    PokemonModule,
+    FriendsModule
   ],
   exports: [
     RouterModule

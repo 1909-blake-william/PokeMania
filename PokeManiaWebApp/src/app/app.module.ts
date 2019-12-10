@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { NavComponent } from './componants/nav/nav.component';
 import { AppRoutingModule } from './app-routing.module';
 import { PokemonModule } from './pokemon/pokemon.module';
+import { FriendsComponent } from './friends/components/friends/friends.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { PokemonModule } from './pokemon/pokemon.module';
     BrowserModule,
     AppRoutingModule,
     PokemonModule
+    
   ],
   providers: [],
   bootstrap: [AppComponent]
