@@ -27,7 +27,7 @@ public class UserDaoSql implements UserDao {
 	private static final UserDaoSql instance = new UserDaoSql();
 	private static final Logger logger = LogManager.getLogger(UserDaoSql.class);
 	private static final String GET_USER_SQL = "SELECT * FROM trainers WHERE trainer_name = ?",
-			INSERT_USER_SQL = "INSERT INTO trainers (trainer_name, trainer_password, first_name, last_name, badges, wins, losses)"
+			INSERT_USER_SQL = "INSERT INTO trainers (trainer_name, trainer_password, first_name, last_name, badges, wins, losses, counter, ctime)"
 					+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
 			INSERT_TEST_SQL = "INSERT INTO trainers VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 			LOGIN_SQL = "SELECT trainer_password FROM trainers WHERE trainer_name = ?",
@@ -99,10 +99,10 @@ public class UserDaoSql implements UserDao {
 	 * @exception SQLException Thrown when there's an issue talking to the db
 	 */
 	public int addNewUser(User user, String password) throws SQLException {
-		// (trainer_name, trainer_password, first_name, last_name, badges, wins, losses)
 
-		PreparedStatement ps = null;
-		PreparedStatement psq = null;
+		PreparedStatement ps 	= null;
+		ResultSet		  rs;
+		int				  id 	= 0;
 
 		try (Connection c = ConnectionUtil.getConnection()) {
 
@@ -119,16 +119,15 @@ public class UserDaoSql implements UserDao {
 			ps.setInt(7, 0);
 			ps.setInt(8, 0);
 			ps.setInt(9, 0);
-
+			
 			ps.executeUpdate();
 			
-			psq = c.prepareStatement(GET_USER_SQL);
-			psq.setString(1, user.getUsername());
-			ResultSet rs = psq.executeQuery();
-			int id = 0;
-			if(rs.next()) {
-				id = rs.getInt(1);
-			}
+			ps = c.prepareStatement(GET_USER_SQL);
+			ps.setString(1, user.getUsername());
+			rs = ps.executeQuery();
+			
+			if(rs.next()) id = rs.getInt(1);
+			
 			return id;
 
 		} catch (SQLException e) {
@@ -234,9 +233,8 @@ public class UserDaoSql implements UserDao {
 			if (rs.next())
 
 				if (password.equals(Password.transformPasswd(rs.getString(1), username)))
-					;
 
-			user = this.fetchUser(username);
+					user = this.fetchUser(username);
 
 		} catch (SQLException e) {
 

@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/components/login/login.component';
 import { LoginModule } from './login/login.module';
-import { RegisterModule } from './register/register.module';
-import { RegisterComponent } from './register/components/register/register.component';
 import { BattleComponent } from './battle/components/battle/battle.component';
 import { BattleModule } from './battle/battle.module';
 import { PokemonModule } from './pokemon/pokemon.module';
@@ -11,6 +9,7 @@ import { PokemonComponentComponent } from './pokemon/components/pokemon-componen
 //import { FriendsComponent } from './friends/components/friends/friends.component';
 //import { FriendsModule } from './friends/friends.module';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { RegisterComponent } from './login/components/register/register.component';
 
 
 const routes: Routes = [
@@ -44,7 +43,6 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes),
     LoginModule,
-    RegisterModule,
     BattleModule,
     PokemonModule
     // FriendsModule
