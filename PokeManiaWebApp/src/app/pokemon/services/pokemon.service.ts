@@ -28,7 +28,7 @@ export class PokemonService {
   $team = this.teamStream.asObservable();
 
   user: User;
-  userSubscription = this.userService.getUser().subscribe(element => {
+  userSubscription = this.userService.$user.subscribe(element => {
     this.user = element;
   });
 

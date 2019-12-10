@@ -28,13 +28,26 @@ export class DoBattleService {
     let pokemon2: Pokemon = null
     let mod1: number = 0
     let mod2: number = 0
+    let hp1: number = 0
+    let hp2: number = 0
 
     //While there are pokemon who can fight
     while(this._team1.length > 0 && this._team2.length > 0) {
 
       //Get the next pokemon
-      if(pokemon1 == null) pokemon1 = this._team1.pop()
-      if(pokemon2 == null) pokemon2 = this._team2.pop()
+      if(pokemon1 == null) {
+
+        pokemon1 = this._team1.pop()
+        hp1 = pokemon1.hp
+
+      }
+
+      if(pokemon2 == null) { 
+        
+        pokemon2 = this._team2.pop()
+        hp2 = pokemon2.hp
+
+      }
 
       //Calculate the type adv modifier
       mod1 = this.typeAdvCalc.modifierCalc(pokemon1, pokemon2)
@@ -44,7 +57,7 @@ export class DoBattleService {
       let p1GoesFirst = pokemon1.spd >= pokemon2.spd
 
       //While both fighting pokemon haven't fainted
-      while(pokemon1.hp > 0 && pokemon2.hp > 0) {
+      while(hp1 > 0 && hp2 > 0) {
 
         let dmg: number
 
@@ -52,7 +65,7 @@ export class DoBattleService {
 
           dmg = this.damage(pokemon1, pokemon2, mod1)
           
-          pokemon2.hp -= dmg
+          hp2 -= dmg
           p1GoesFirst = false
           this._results.push(new BattleTurn(pokemon1, pokemon2, dmg))
 
@@ -60,7 +73,7 @@ export class DoBattleService {
 
           dmg = this.damage(pokemon2, pokemon1, mod2)
           
-          pokemon1.hp -= dmg
+          hp1 -= dmg
           p1GoesFirst = true
           this._results.push(new BattleTurn(pokemon2, pokemon1, dmg))
 
@@ -68,8 +81,8 @@ export class DoBattleService {
 
       }
 
-      if(pokemon1.hp <= 0) pokemon1 = null
-      if(pokemon2.hp <= 0) pokemon2 = null
+      if(hp1 <= 0) pokemon1 = null
+      if(hp2 <= 0) pokemon2 = null
 
     }
 
