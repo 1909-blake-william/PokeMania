@@ -28,6 +28,10 @@
 * Method: PUT
 * Endpoint: /PokeManiaAPI/api/updateuser
 
+> **UPDATE COUNTER**
+* Method: PUT
+* Endpoint: /PokeManiaAPI/api/updatecounter
+
 #### PokemonDispatcher
 
 > **View All User's Pokemon (BOX)**

@@ -101,4 +101,24 @@ public class UserHandler {
 		}
 	}
 	
+	
+	public static void handleUpdateCounter(HttpServletRequest request, HttpServletResponse response) {
+		logger.info("Inside User Update Counter");
+		try {
+			User user = (User) Json.read(request.getInputStream(), User.class);
+			boolean wasSuccessful = dao.updateCounter(user);
+			if(wasSuccessful) {
+				response.setStatus(HttpServletResponse.SC_ACCEPTED);
+				logger.info("Updated User Counter");
+				return;
+			} else {
+				response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+				logger.info("Unable to Update Counter.");
+				return;
+			}
+		} catch (IOException | SQLException e) {
+			logger.warn("Exception encounterd in Handle Update Counter: {}", e);
+		}
+	}
+	
 }
