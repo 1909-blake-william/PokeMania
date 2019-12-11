@@ -1,0 +1,20 @@
+2019-12-11 00:57:21,624 INFO o.a.j.u.JMeterUtils: Setting Locale to en_EN
+2019-12-11 00:57:21,692 INFO o.a.j.JMeter: Loading user properties from: /usr/local/apache-jmeter-5.2/bin/user.properties
+2019-12-11 00:57:21,694 INFO o.a.j.JMeter: Loading system properties from: /usr/local/apache-jmeter-5.2/bin/system.properties
+2019-12-11 00:57:21,701 INFO o.a.j.JMeter: Copyright (c) 1998-2019 The Apache Software Foundation
+2019-12-11 00:57:21,701 INFO o.a.j.JMeter: Version 5.2
+2019-12-11 00:57:21,701 INFO o.a.j.JMeter: java.version=1.8.0_221
+2019-12-11 00:57:21,701 INFO o.a.j.JMeter: java.vm.name=Java HotSpot(TM) 64-Bit Server VM
+2019-12-11 00:57:21,701 INFO o.a.j.JMeter: os.name=Mac OS X
+2019-12-11 00:57:21,702 INFO o.a.j.JMeter: os.arch=x86_64
+2019-12-11 00:57:21,702 INFO o.a.j.JMeter: os.version=10.15.1
+2019-12-11 00:57:21,702 INFO o.a.j.JMeter: file.encoding=UTF-8
+2019-12-11 00:57:21,703 INFO o.a.j.JMeter: java.awt.headless=null
+2019-12-11 00:57:21,703 INFO o.a.j.JMeter: Max memory     =1073741824
+2019-12-11 00:57:21,703 INFO o.a.j.JMeter: Available Processors =4
+2019-12-11 00:57:21,714 INFO o.a.j.JMeter: Default Locale=English (EN)
+2019-12-11 00:57:21,715 INFO o.a.j.JMeter: JMeter  Locale=English (EN)
+2019-12-11 00:57:21,715 INFO o.a.j.JMeter: JMeterHome=/usr/local/apache-jmeter-5.2
+2019-12-11 00:57:21,715 INFO o.a.j.JMeter: user.dir  =/Users/jeanjoseph/Documents/Revature/Assignments/005P2Pokemania/PokeMania
+2019-12-11 00:57:21,715 INFO o.a.j.JMeter: PWD       =/Users/jeanjoseph/Documents/Revature/Assignments/005P2Pokemania/PokeMania
+2019-12-11 00:57:21,717 INFO o.a.j.JMeter: IP: 127.0.0.1 Name: Elezabeths-MacBook-Air.local FullName: localhost
