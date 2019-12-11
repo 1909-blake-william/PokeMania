@@ -62,7 +62,7 @@ export class BoxComponent implements OnInit {
         }
         i = 0;
       }
-      this.teamSubscription.unsubscribe();
+      
     });
 
 
@@ -78,7 +78,7 @@ export class BoxComponent implements OnInit {
   ngOnDestroy() {
     this.boxSubscription.unsubscribe();
     this.sizeSubscription.unsubscribe();
-
+    this.teamSubscription.unsubscribe();
   }
 
 
