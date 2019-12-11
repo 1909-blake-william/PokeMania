@@ -32,6 +32,7 @@ public class AuthDispatcher implements Dispatcher {
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			LoginForm form = (LoginForm) Json.read(request.getInputStream(), LoginForm.class);
+			System.out.println(form);
 			User info = userDao.login(form.getUsername(), form.getPassword());
 			if (request.getMethod().equals("PUT")) {
 				Cookie cookie = new Cookie("currentUser","");
