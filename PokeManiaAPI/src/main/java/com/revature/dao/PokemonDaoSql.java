@@ -29,17 +29,19 @@ public class PokemonDaoSql implements PokemonDao {
 											GET_TEAM_SQL	= "SELECT * FROM pokemon WHERE pokemon_id IN (SELECT pokemon_id FROM pokemon_team WHERE trainer_id = ?)",
 											SAVE_ONE_SQL	= "INSERT INTO pokemon (trainer_id, pokedex_id, pokemon_level, "
 															+ "pokemon_hp, pokemon_att, pokemon_def, pokemon_speed, pokemon_type1, "
-															+ "pokemon_type2 front_image, back_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+															+ "pokemon_type2, front_image, back_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+											GET_CATCH_ID_SQL= "SELECT * FROM pokemon WHERE trainer_id = ? AND pokedex_id = ?",
 											SAVE_TEST_SQL	= "INSERT INTO pokemon VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 											SAVE_TEAM_SQL	= "INSERT INTO pokemon_team VALUES (?, ?)",
-											CLEAR_TEAM_SQL	= "DELETE FROM pokemon_team WHERE trainer_id = ?";
+											CLEAR_TEAM_SQL	= "DELETE FROM pokemon_team WHERE trainer_id = ?",
+											RM_POKE			= "DELETE FROM pokemon WHERE pokemon_id = ?";
 											
 	private PokemonDaoSql() {};
 	
 	/**
 	 * Fetch the singleton instance of the DAO
 	 * 
-	 * @return the single instance of this DAo
+	 * @return The single instance of this DAo
 	 */
 	public static PokemonDaoSql getInstance() {
 		
@@ -50,9 +52,9 @@ public class PokemonDaoSql implements PokemonDao {
 	/**
 	 * Fetch a single pokemon from the user's box
 	 * 
-	 * @param id of the pokemon
-	 * @return The pokemon
-	 * @exception Throws a SQLException if an issue happens when talking to the db
+	 * @param id Id of the pokemon needed
+	 * @return The pokemon requested
+	 * @exception SQLException Throw when there's an issue talking with the db
 	 */
 	@Override
 	public Pokemon fetchPokemon(int id) throws SQLException {
@@ -88,9 +90,9 @@ public class PokemonDaoSql implements PokemonDao {
 	/**
 	 * Fetch the saved team of the user
 	 * 
-	 * @param The user's id
+	 * @param userID The user's id
 	 * @return The last team the user had saved
-	 * @exception Throws a SQLException if an issue happens when talking to the db
+	 * @exception SQLException Throw when there's an issue talking with the db
 	 */
 	@Override
 	public Pokemon[] fetchTeam(int userID) throws SQLException {
@@ -126,9 +128,9 @@ public class PokemonDaoSql implements PokemonDao {
 	/**
 	 * Fetch all the pokemon the user owns
 	 * 
-	 * @param The user's id
+	 * @param userID The user's id
 	 * @return All the pokemon the user owns
-	 * @exception Throws a SQLException if an issue happens when talking to the db
+	 * @exception SQLException Throw when there's an issue talking with the db
 	 */
 	@Override
 	public Pokemon[] fetchBox(int userID) throws SQLException {
@@ -162,16 +164,17 @@ public class PokemonDaoSql implements PokemonDao {
 	}
 
 	/**
-	 * Save a single pokemon to the db
+	 * Save a single pokemon to the db, then return the pokemon's id
 	 * 
-	 * @param The pokemon to save
-	 * @return Whether save was successful
-	 * @exception Throws a SQLException if an issue happens when talking to the db
+	 * @param pokemon The pokemon to save
+	 * @return The generated id
+	 * @exception SQLException Throw when there's an issue talking with the db
 	 */
 	@Override
-	public boolean savePokemon(Pokemon pokemon) throws SQLException {
+	public int savePokemon(Pokemon pokemon) throws SQLException {
 		
 		PreparedStatement	ps;
+		PreparedStatement   psq;
 		
 		try(Connection c = ConnectionUtil.getConnection()) {
 			
@@ -188,7 +191,20 @@ public class PokemonDaoSql implements PokemonDao {
 			ps.setString(10, pokemon.getFrontImg());
 			ps.setString(11, pokemon.getBackImg());
 			
-			return ps.executeUpdate() == 1;
+			ps.executeUpdate();
+			
+			
+			psq = c.prepareStatement(GET_CATCH_ID_SQL);
+			psq.setInt(1, pokemon.getTrainerId());
+			psq.setInt(2, pokemon.getDexNum());
+			
+			ResultSet rs = psq.executeQuery();
+			int id = 0;
+			if (rs.next()) {
+				id = rs.getInt(1);
+			}
+			
+			return id;
 			
 		} catch(SQLException e) {
 			
@@ -202,9 +218,9 @@ public class PokemonDaoSql implements PokemonDao {
 	/**
 	 * Save a single pokemon to the db and set the ID
 	 * 
-	 * @param The pokemon to save
+	 * @param pokemon The pokemon to save
 	 * @return Whether save was successful
-	 * @exception Throws a SQLException if an issue happens when talking to the db
+	 * @exception SQLException Throw when there's an issue talking with the db
 	 */
 	public boolean save_TEST_pokemon(Pokemon pokemon) throws SQLException {
 		
@@ -240,26 +256,29 @@ public class PokemonDaoSql implements PokemonDao {
 	/**
 	 * Saves the current team of the user
 	 * 
-	 * @param The team to save
+	 * @param pokemon The team to save
 	 * @return Whether writing all was successful
-	 * @exception Throws a SQLException if an issue happens when talking to the db
+	 * @exception SQLException Throw when there's an issue talking with the db
 	 */
 	@Override
-	public boolean saveTeam(Pokemon[] pokemon) throws SQLException {
+	public boolean saveTeam(int userID, int[]pokeTeam) throws SQLException {
 		
 		PreparedStatement	ps;
 		
-		clearTeam(pokemon[0].getTrainerId());
+		clearTeam(userID);
 		
 		try(Connection c = ConnectionUtil.getConnection()) {
 			
 			ps = c.prepareStatement(SAVE_TEAM_SQL);
 			
 			//Add each pokemon to a batch for an efficient whole team write
-			for(Pokemon poke : pokemon) {
+			for(int poke : pokeTeam) {
 				
-				ps.setInt(1, poke.getTrainerId());
-				ps.setInt(2, poke.getId());
+				if (poke == 0) {
+					break;
+				}
+				ps.setInt(1, userID);
+				ps.setInt(2, poke);		
 				ps.addBatch();
 				ps.clearParameters();
 				
@@ -284,7 +303,7 @@ public class PokemonDaoSql implements PokemonDao {
 	 * Called before saving a team to wipe the state so that it can be overwritten
 	 * 
 	 * @param userID The id of the logged in user
-	 * @throws SQLException Thrown if the DB has an issue
+	 * @throws SQLException Throw when there's an issue talking with the db
 	 */
 	private void clearTeam(int userID) throws SQLException {
 		
@@ -299,6 +318,31 @@ public class PokemonDaoSql implements PokemonDao {
 		} catch(SQLException e) {
 			
 			log.warn("Error: Failed to clear last saved team\n" + e.getMessage());
+			throw e;
+			
+		}
+		
+	}
+	
+	/**
+	 * Release a pokemon (delete from db)
+	 * 
+	 * @param pokemon The pokemon to be released
+	 * @return Whether release was successful
+	 * @exception SQLException Throw when there's an issue talking with the db
+	 */
+	public boolean releasePoke(int pokemonID) throws SQLException {
+		
+		PreparedStatement ps;
+				
+		try(Connection c = ConnectionUtil.getConnection()) {
+			ps = c.prepareStatement(RM_POKE);
+			ps.setInt(1, pokemonID);
+			return ps.executeUpdate() == 1;
+			
+		} catch(SQLException e) {
+			
+			log.warn("Error: Failed to release pokemon" + e.getMessage());
 			throw e;
 			
 		}

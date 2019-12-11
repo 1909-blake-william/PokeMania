@@ -28,9 +28,9 @@ public class PokemonDaoTester {
 											p3,
 											p4,
 											p5;
-	private static final	User			t1 		= new User("Tester11", "Bob", "Man", -1, 0, 0, 0),
-											t2		= new User("Tester22", "Bob", "Man", -2, 0, 0, 0),
-											t3		= new User("Tester33", "Bob", "Man", -3, 0, 0, 0);
+	private static final	User			t1 		= new User("Tester11", "Bob", "Man", -1, 0, 0, 0, 0, 0),
+											t2		= new User("Tester22", "Bob", "Man", -2, 0, 0, 0, 0, 0),
+											t3		= new User("Tester33", "Bob", "Man", -3, 0, 0, 0, 0, 0);
 	
 	@BeforeClass
 	public static void setup() throws SQLException {
@@ -250,6 +250,22 @@ public class PokemonDaoTester {
 		
 	}
 	
+	@Test
+	public void deletePoke() {
+		
+		try {
+			
+			assertTrue(dao.releasePoke(p3.getId()));
+			
+		} catch(SQLException e) {
+			
+			//Fail the test
+			assertTrue(false);
+			
+		}
+		
+	}
+	
 	@AfterClass
 	public static void cleanUp() throws SQLException {
 		
@@ -272,9 +288,6 @@ public class PokemonDaoTester {
 			ps.addBatch();
 			ps.clearParameters();
 			ps.setInt(1, p2.getId());
-			ps.addBatch();
-			ps.clearParameters();
-			ps.setInt(1, p3.getId());
 			ps.addBatch();
 			ps.clearParameters();
 			ps.setInt(1, p4.getId());

@@ -82,9 +82,26 @@ BEGIN
     SELECT trade_id_seq.nextval INTO :new.trade_id FROM dual;
 END;
 
+ALTER TABLE trainers
+ADD counter NUMBER;
+
+ALTER TABLE trainers
+ADD cTime NUMBER;
+
 --INSERT INTO trainers
 --(trainer_id,trainer_name,trainer_password,first_name,last_name,badges,wins, losses)
 --VALUES(-199,'kkkkyyyykris','pass','him','me',0,0,0);
     
 --DELETE FROM trainers;
+
+SELECT * FROM trainers;
+SELECT * FROM pokemon;
+SELECT * FROM pokemon_team;
+SELECT * FROM friends;
+
+INSERT INTO pokemon
+(pokemon_id, trainer_id, pokedex_id, pokemon_level, pokemon_hp, pokemon_att, pokemon_def, pokemon_speed, pokemon_type1, front_image, back_image)
+VALUES (1, 285, 1, 1, 1, 1, 1, 1, 'electric', 'img', 'img');
+
+
     

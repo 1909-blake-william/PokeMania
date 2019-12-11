@@ -14,10 +14,12 @@ public interface UserDao {
 	//Please access dao from here with UserDao.currentImplementation
 	UserDao	currentImplementation = UserDaoSql.getInstance();
 	
-	User 	fetchUser(String username) throws SQLException;
-	boolean	addNewUser(User user, String password) throws SQLException;
+	User fetchUser(String username) throws SQLException;
+	int	addNewUser(User user, String password) throws SQLException;
 	boolean	addFriend(String username, String friendName) throws SQLException;
-	String	getPassword(String username) throws SQLException;
-	String[] getFriends(int userID) throws SQLException;
+	User login(String username, String password) throws SQLException;
+	User[] getFriends(int userID) throws SQLException;
+	boolean	updateStats(User user) throws SQLException;
+	boolean updateCounter(User user) throws SQLException;
 	
 }

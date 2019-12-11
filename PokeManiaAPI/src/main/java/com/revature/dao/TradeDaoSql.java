@@ -48,11 +48,11 @@ public class TradeDaoSql implements TradeDao {
 	/**
 	 * Opens a trade offer by writing that info down to the db
 	 * 
-	 * @param openerID: the id of the initiating trainer
-	 * @param partnerID: the id of the trainer with whom to trade
-	 * @param offerPokemonID: the offered up pokemonID
+	 * @param openerID The id of the initiating trainer
+	 * @param partnerID The id of the trainer with whom to trade
+	 * @param offerPokemonID The offered up pokemonID
 	 * @return Whether creation of trade was successful
-	 * @exception Thrown if there's an issue with the DB writting down the offer
+	 * @exception SQLException Thrown when there's an issue talking to the db
 	 */
 	public boolean openTradeOffer(int openerID, int partnerID, int offerPokemonID) throws SQLException {
 		
@@ -80,9 +80,9 @@ public class TradeDaoSql implements TradeDao {
 	/**
 	 * Get all open trades involving this trainer
 	 * 
-	 * @param openerID: the id of the initiating trainer
+	 * @param trainerID The id of the initiating trainer
 	 * @return All open trades which include this trainer
-	 * @exception Throw if there's an issue with the db reading the offers
+	 * @exception SQLException Thrown when there's an issue talking to the db
 	 */
 	@Override
 	public Trade[] fetchTrades(int trainerID) throws SQLException {
@@ -119,10 +119,10 @@ public class TradeDaoSql implements TradeDao {
 	/**
 	 * Update an opening offer with the proposed offer and set the status accordingly
 	 * 
-	 *@param The id of the trade to be updated
-	 *@param The offered pokemonID
+	 *@param tradeID The id of the trade to be updated
+	 *@param offeredPokemonID The offered pokemonID
 	 *@return Whether the update was successful
-	 *@exception Thrown if there's an issue with the db updating the offer
+	 *@exception SQLException Thrown when there's an issue talking to the db
 	 */
 	@Override
 	public boolean updateOffer(int tradeID, int offeredPokemonID) throws SQLException {
@@ -163,9 +163,9 @@ public class TradeDaoSql implements TradeDao {
 	/**
 	 * Updates the offer to declined
 	 * 
-	 * @param The id of the trade to close
+	 * @param tradeID The id of the trade to close
 	 * @return Whether the update was successful
-	 * @exception Thrown if there's an issue with the db updaing the offer
+	 * @exception SQLException Thrown when there's an issue talking to the db
 	 */
 	@Override
 	public boolean decline(int tradeID) throws SQLException {
@@ -204,9 +204,9 @@ public class TradeDaoSql implements TradeDao {
 	/**
 	 * Updates the offer to accepted
 	 * 
-	 * @param The id of the trade to close
+	 * @param tradeID The id of the trade to close
 	 * @return Whether the update was successful
-	 * @exception Throw if there's an issue with the db updating the offer
+	 * @exception SQLException Thrown when there's an issue talking to the db
 	 */
 	@Override
 	public boolean accept(int tradeID) throws SQLException {
