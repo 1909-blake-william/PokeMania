@@ -26,18 +26,21 @@ export class FriendserviceService {
   });
 
   constructor(private httpClient: HttpClient, private userService: UserService) {
+    this.refreshList();
+  }
 
-    this.httpClient.get<User[]>(`http://localhost:8080/PokeManiaAPI/api/getfriends?userid=285`, {
+  refreshList(){
+    this.httpClient.get<User[]>(`http://localhost:8080/PokeManiaAPI/api/getfriends?userid=${this.user.id}`, {
     withCredentials: true
   })
   .subscribe(data => {
+    if(!data){
+      data = [];
+    }
     this.friendStream.next(data);
   }, err => {
     console.log(err);
   });
-
-
-
   }
 
 

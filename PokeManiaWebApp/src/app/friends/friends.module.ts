@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { UserService } from '../login/services/user.service';
 import { FriendsComponent } from './components/friends/friends.component';
+import { FriendserviceService } from './services/friendservice.service';
 
 
 
 @NgModule({
-  providers: [HttpClient, UserService],
+  providers: [HttpClient, UserService, FriendserviceService, UserService],
   declarations: [FriendsComponent],
   imports: [
     CommonModule,
