@@ -20,6 +20,10 @@
 * Method: POST
 * Endpoint: /PokeManiaAPI/api/createuser?password={insert password here}  
 
+> **FIND USER/TRAINER**
+* Method: GET
+* Endpoint: /PokeManiaAPI/api/finduser?username={username to be found}
+
 > **ADD FRIEND**
 * Method: POST
 * Endpoint: /PokeManiaAPI/api/addfriend?friendusername={Insert friend username here}  
