@@ -68,8 +68,8 @@ public class UserHandler {
 		int userId = Integer.parseInt(request.getParameter("userid"));
 		logger.info("Your user ID is: {}", userId);
 		try {
-			String[] friends = dao.getFriends(userId);
-			if(friends.length == 0) {
+			User[] friends = dao.getFriends(userId);		
+			if(friends == null) {
 				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 			} else {
 				response.setContentType(Json.CONTENT_TYPE);
@@ -119,6 +119,26 @@ public class UserHandler {
 			}
 		} catch (IOException | SQLException e) {
 			logger.warn("Exception encounterd in Handle Update Counter: {}", e);
+		}
+	}
+	
+	public static void handleFindFriend(HttpServletRequest request, HttpServletResponse response) {
+		logger.info("Inside Get Friend Finder UserHandler");
+		String username = request.getParameter("username");
+		logger.info("Your username is: {}", username);
+		try {
+			User friend = dao.fetchUser(username);		
+			if(friend == null) {
+				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+			} else {
+				response.setContentType(Json.CONTENT_TYPE);
+				response.getOutputStream().write(Json.write(friend));
+				return;
+			}
+		} catch (SQLException | IOException e) {
+			logger.warn("Exception was thrown: {}", e);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return;
 		}
 	}
 	

@@ -334,11 +334,11 @@ public class UserDaoSql implements UserDao {
 
 		while (friendIDs.size() > 0) {
 
-			sb.append(" OR ");
+			sb.append(" OR trainer_id = ");
 			sb.append(friendIDs.removeFirst());
 
 		}
-
+		logger.info(sb.toString());
 		return sb.toString();
 
 	}
@@ -358,7 +358,7 @@ public class UserDaoSql implements UserDao {
 		List<User> users = new ArrayList<>();
 
 		try (Connection c = ConnectionUtil.getConnection()) {
-
+			logger.info(FETCH_FRND + idList);
 			ps = c.prepareStatement(FETCH_FRND + idList);
 			rs = ps.executeQuery();
 

@@ -13,7 +13,7 @@ public class UserDispatcher implements Dispatcher {
 
 	@Override
 	public boolean supports(HttpServletRequest request) {
-		return isCreateUser(request) || isAddFriend(request) || isGetFriends(request) || isUpdateUser(request) || isUpdateCounter(request);
+		return isCreateUser(request) || isAddFriend(request) || isFindUser(request) || isGetFriends(request) || isUpdateUser(request) || isUpdateCounter(request);
 	}
 
 	@Override
@@ -28,6 +28,8 @@ public class UserDispatcher implements Dispatcher {
 			UserHandler.handleUpdateUser(request, response);
 		} else if (isUpdateCounter(request)) {
 			UserHandler.handleUpdateCounter(request, response);
+		} else if (isFindUser(request)) {
+			UserHandler.handleFindFriend(request, response);
 		}
 
 	}
@@ -42,6 +44,11 @@ public class UserDispatcher implements Dispatcher {
 				&& request.getParameter("friendusername") != null;
 	}
 
+	public boolean isFindUser(HttpServletRequest request) {
+		return request.getMethod().equals("GET") && request.getRequestURI().equals("/PokeManiaAPI/api/finduser")
+				&& request.getParameter("username") != null;
+	}
+	
 	public boolean isGetFriends(HttpServletRequest request) {
 		return request.getMethod().equals("GET") && request.getRequestURI().equals("/PokeManiaAPI/api/getfriends")
 				&& request.getParameter("userid") != null;

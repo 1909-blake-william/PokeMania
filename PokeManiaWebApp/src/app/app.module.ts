@@ -5,12 +5,13 @@ import { AppComponent } from './app.component';
 import { NavComponent } from './components/nav/nav.component';
 import { AppRoutingModule } from './app-routing.module';
 import { PokemonModule } from './pokemon/pokemon.module';
-//import { FriendsComponent } from './friends/components/friends/friends.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { LogoutComponent } from './components/logout/logout.component'
 import { UserService } from './login/services/user.service';
+import { FriendsModule } from './friends/friends.module';
+
 
 @NgModule({
   declarations: [
@@ -23,8 +24,8 @@ import { UserService } from './login/services/user.service';
     BrowserModule,
     AppRoutingModule,
     PokemonModule,
-    NgbModule
-
+    NgbModule,
+    FriendsModule
   ],
   providers: [UserService],
   bootstrap: [AppComponent]
