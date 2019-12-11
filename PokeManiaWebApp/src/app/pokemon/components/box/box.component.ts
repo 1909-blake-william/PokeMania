@@ -62,7 +62,6 @@ export class BoxComponent implements OnInit {
         }
         i = 0;
       }
-      
     });
 
 
