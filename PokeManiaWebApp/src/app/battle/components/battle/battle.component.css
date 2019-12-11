@@ -43,3 +43,15 @@ h1 {
     height: fit-content;
 
 }
+
+progress {
+
+    height: 20px;
+
+}
+
+#trainer-hp {
+
+    margin-top: 575px;
+
+}

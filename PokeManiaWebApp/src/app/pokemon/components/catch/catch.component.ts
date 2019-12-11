@@ -20,9 +20,9 @@ export class CatchComponent implements OnInit {
 
   ngOnInit() {
     // check if time is >= 24 hours worth of ms to reset counter
-    // if ((Date.now() - this.user.cTime) >= 86400000) {
-    //   this.pokemonService.resetCounter(this.user.id);
-    // }
+    if ((Date.now() - this.user.cTime) >= 86400000 && this.user.counter !== 0) {
+      this.pokemonService.resetCounter(this.user.id);
+    }
   }
 
 async findPoke() {

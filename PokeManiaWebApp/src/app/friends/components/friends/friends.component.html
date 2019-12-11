@@ -13,7 +13,7 @@
                     <input class="form-control mr-sm-2" type="search" placeholder="Search Friends List" aria-label="Search">
                     <br>
                    
-                   <div *ngFor(let friend of friends) >
+                   <div *ngFor="let friend of friends">
                     <button style="padding: 20px; width: 300px" class="btn btn-outline-primary" (click)="open('autofocus')">
                             <div>{{friend.firstname}} {{friend.lastname}} / <small>{{user.username}}</small></div>
                             <div class="text-dark" aria-hidden="true"><small>Wins: {{friend.wins}}</small></div>

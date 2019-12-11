@@ -3,6 +3,9 @@ import { TeamfetchService } from '../../services/teamfetch.service';
 import { DoBattleService } from '../../services/do-battle.service';
 import { Pokemon } from 'src/app/models/Pokemon';
 import { BattleTurn } from 'src/app/models/BattleTurn';
+import { UserService } from 'src/app/login/services/user.service';
+import { User } from '../../../models/User'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-battle',
@@ -18,11 +21,16 @@ export class BattleComponent implements OnInit {
   public isDataReady: boolean = false
   public opponentDmg: number = 0
   public trainerDmg: number = 0
+  public trainerHP: number = 0
+  public opponentHP: number = 0
   public showOpponentDmg: boolean
   public showTrainerDmg: boolean
   private _battleTurns: BattleTurn[]
+  private userSub = this.userService.$user.subscribe(user => this.user = user)
+  private user: User
+  private oppID: number = -2
 
-  constructor(private teamFetcher: TeamfetchService, private battleCalc: DoBattleService) { }
+  constructor(private teamFetcher: TeamfetchService, private battleCalc: DoBattleService, private userService: UserService, private router: Router) { }
 
   ngOnInit() {
     this.run()
@@ -30,11 +38,20 @@ export class BattleComponent implements OnInit {
 
   public run() {
 
-    this.teamFetcher.fetchTeam(1).then(team => {
+    if(this.user == null) {
+      
+      this.router.navigateByUrl('')
+      return
+
+    }
+
+    this.teamFetcher.fetchTeam(this.user.id).then(team => {
 
       this._team1 = team
 
-      this.teamFetcher.fetchTeam(2).then(team => {
+      console.log(team)
+
+      this.teamFetcher.genNPCTeam(this.oppID).then(team => {
 
         this._team2 = team
 
@@ -42,7 +59,7 @@ export class BattleComponent implements OnInit {
 
           this._battleTurns = turns
 
-          if(turns[0].attacker.trainerId == 1) {
+          if(turns[0].attacker.trainerId == this.user.id) {
 
             this.pokemon1 = turns[0].attacker
             this.pokemon2 = turns[0].defender
@@ -53,7 +70,8 @@ export class BattleComponent implements OnInit {
             this.pokemon2 = turns[0].attacker
 
           }
-
+          this.trainerHP = this.pokemon1.hp
+          this.opponentHP = this.pokemon2.hp
           this.isDataReady = true
           this.displayResults()
 
@@ -92,9 +110,23 @@ export class BattleComponent implements OnInit {
 
     for(let turn of this._battleTurns) {
 
-      setTimeout(() => this.updateScreen(turn.attacker, turn.defender, turn.attacker.trainerId === 1, turn.damage), time += 1000);
+      setTimeout(() => this.updateScreen(turn.attacker, turn.defender, turn.attacker.trainerId === this.user.id, turn.damage), time += 1000);
 
     }
+
+    setTimeout(() => {
+
+      let dead = this._battleTurns[this._battleTurns.length - 1].defender
+
+      if(dead == this.pokemon1)
+
+        this.pokemon1.backImg = 'img'
+
+      else
+
+        this.pokemon2.frontImg = 'img'
+
+    }, time += 1000)
 
   }
 
@@ -102,24 +134,52 @@ export class BattleComponent implements OnInit {
 
     if(trainerDidAttack) {
 
-      if(this.pokemon1 != attacker) this.pokemon1 = attacker
-      if(this.pokemon2 != defender) this.pokemon2 = defender
+      if(this.pokemon1 != attacker) { 
+        
+        this.pokemon1 = attacker
+        this.trainerHP = this.pokemon1.hp
+
+      }
+
+      if(this.pokemon2 != defender) {
+        
+        this.pokemon2 = defender
+        this.opponentHP = this.pokemon2.hp
+
+      }
 
       this.opponentDmg = dmg
+      this.opponentHP -= dmg
       this.showOpponentDmg = true
       setTimeout(() => {this.showOpponentDmg = false}, 500);
 
     } else {
 
-      if(this.pokemon1 != defender) this.pokemon1 = defender
-      if(this.pokemon2 != attacker) this.pokemon2 = attacker
+      if(this.pokemon1 != defender) {
+        
+        this.pokemon1 = defender
+        this.trainerHP = this.pokemon1.hp
+
+      }
+
+      if(this.pokemon2 != attacker) {
+        
+        this.pokemon2 = attacker
+        this.opponentHP = this.pokemon2.hp
+
+      }
 
       this.trainerDmg = dmg
+      this.trainerHP -= dmg
       this.showTrainerDmg = true
       setTimeout(() => {this.showTrainerDmg = false}, 500);
 
     }
 
+  }
+
+  ngOnDestroy() {
+    this.userSub.unsubscribe()
   }
 
 }
