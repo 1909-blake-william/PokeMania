@@ -10,6 +10,7 @@ import { FriendsComponent } from './friends/components/friends/friends.component
 import { FriendsModule } from './friends/friends.module';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { RegisterComponent } from './login/components/register/register.component';
+import { FriendSelectComponent } from './battle/components/friend-select/friend-select.component';
 
 
 const routes: Routes = [
@@ -24,6 +25,10 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent
+  },
+  {
+    path: 'prepare%20for%20battle',
+    component: FriendSelectComponent
   },
   {
     path: 'battle',

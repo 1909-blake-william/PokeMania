@@ -14,6 +14,10 @@ export class TeamfetchService {
 
     let response: any
 
+    if(userID == -2)
+
+      return await this.genNPCTeam(userID)
+
     try {
 
       response = await this.http.get(`http://localhost:8080/PokeManiaAPI/api/pokemonteam?userId=${userID}`, {withCredentials: true}).toPromise()
@@ -28,10 +32,8 @@ export class TeamfetchService {
 
   }
 
-  //Fetch a team for a user
-  public async genNPCTeam(userID: number): Promise<Pokemon[]> {
+  private async genNPCTeam(userID: number): Promise<Pokemon[]> {
 
-    //Mocked for now
     let team: Pokemon[] = []
     let pokeID: number = Math.floor(Math.random() * 700 + 1)
 
@@ -40,8 +42,6 @@ export class TeamfetchService {
       team.push(await this.getPokemon(pokeID += 5, userID))
 
     return team
-
-    //Call the api for the team
 
   }
 

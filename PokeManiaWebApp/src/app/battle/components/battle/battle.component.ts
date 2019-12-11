@@ -6,6 +6,8 @@ import { BattleTurn } from 'src/app/models/BattleTurn';
 import { UserService } from 'src/app/login/services/user.service';
 import { User } from '../../../models/User'
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { OpponentService } from '../../services/opponent.service';
 
 @Component({
   selector: 'app-battle',
@@ -27,10 +29,12 @@ export class BattleComponent implements OnInit {
   public showTrainerDmg: boolean
   private _battleTurns: BattleTurn[]
   private userSub = this.userService.$user.subscribe(user => this.user = user)
+  private oppSub = this.opponentService.$opponent.subscribe(opp => this.oppID = opp)
   private user: User
-  private oppID: number = -2
+  private oppID: number
 
-  constructor(private teamFetcher: TeamfetchService, private battleCalc: DoBattleService, private userService: UserService, private router: Router) { }
+  constructor(private teamFetcher: TeamfetchService, private battleCalc: DoBattleService, private userService: UserService, private router: Router,
+            private http: HttpClient, private opponentService: OpponentService) { }
 
   ngOnInit() {
     this.run()
@@ -48,16 +52,26 @@ export class BattleComponent implements OnInit {
     this.teamFetcher.fetchTeam(this.user.id).then(team => {
 
       this._team1 = team
-
-      console.log(team)
-
-      this.teamFetcher.genNPCTeam(this.oppID).then(team => {
+      
+      this.teamFetcher.fetchTeam(this.oppID).then(team => {
 
         this._team2 = team
 
         this.getBattleResults().then(turns => {
 
           this._battleTurns = turns
+
+          if(this.battleCalc.winner == this.user.id) {
+
+            this.user.wins++
+            this.updateRecords(this.user)
+
+          } else {
+
+            this.user.losses++
+            this.updateRecords(this.user)
+
+          }
 
           if(turns[0].attacker.trainerId == this.user.id) {
 
@@ -92,15 +106,14 @@ export class BattleComponent implements OnInit {
     
   }
 
-  private setWinner(): void {
+  private updateRecords(user: User): void {
 
-    // this.battleCalc.winner send to db
+    if(user.id == -2)
 
-  }
+      return
 
-  private setLoser(): void {
-
-    // this.battleCalc.loser send to db
+    this.http.put(`http://localhost:8080/PokeManiaAPI/api/updateuser`, JSON.stringify(user), {withCredentials: true})
+    .subscribe(response => {})
 
   }
 
@@ -180,6 +193,7 @@ export class BattleComponent implements OnInit {
 
   ngOnDestroy() {
     this.userSub.unsubscribe()
+    this.oppSub.unsubscribe()
   }
 
 }

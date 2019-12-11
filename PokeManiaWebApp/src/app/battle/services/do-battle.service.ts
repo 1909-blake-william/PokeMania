@@ -14,6 +14,8 @@ export class DoBattleService {
   private _team2: Pokemon[] = []
   private _winner: number = null
   private _loser: number = null
+  private _uID1: number
+  private _uID2: number
 
   constructor(private http: HttpClient, private typeAdvCalc: TypeAdvCalculatorService) { }
 
@@ -30,6 +32,8 @@ export class DoBattleService {
     let mod2: number = 0
     let hp1: number = 0
     let hp2: number = 0
+    this._uID1 = this._team1[0].trainerId
+    this._uID2 = this._team2[0].trainerId
 
     //While there are pokemon who can fight
     while(this._team1.length > 0 && this._team2.length > 0) {
@@ -83,6 +87,18 @@ export class DoBattleService {
 
       if(hp1 <= 0) pokemon1 = null
       if(hp2 <= 0) pokemon2 = null
+
+    }
+
+    if(hp1 > 0) {
+
+      this._winner = this._uID1
+      this._loser = this._uID2
+
+    } else {
+
+      this._winner = this._uID2
+      this._loser = this._uID1
 
     }
 
